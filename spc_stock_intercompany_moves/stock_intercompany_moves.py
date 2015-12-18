@@ -90,7 +90,7 @@ class StockMove(models.Model):
         return super(StockMove, self).force_assign(
             cr, uid, move_ids, context=context)
 
-	def _get_price_unit_invoice(self, cr, uid, move_line, type, context=None):
+    def _get_price_unit_invoice(self, cr, uid, move_line, type, context=None):
         """ Gets price unit for invoice
         @param move_line: Stock move lines
         @param type: Type of invoice
@@ -99,7 +99,7 @@ class StockMove(models.Model):
         if context is None:
             context = {}
         if type in ('in_invoice', 'in_refund') and move_line.location_id.usage == 'transit':
-			if move_line.partner_id and move_line.partner_id.property_product_pricelist_purchase:
+            if move_line.partner_id and move_line.partner_id.property_product_pricelist_purchase:
                 pricelist_obj = self.pool.get("product.pricelist")
                 pricelist = move_line.partner_id.property_product_pricelist_purchase.id
                 price = pricelist_obj.price_get(cr, uid, [pricelist],
@@ -109,5 +109,5 @@ class StockMove(models.Model):
                             })[pricelist]
                 if price:
                     return price
-		return = super(StockMove, self)._get_price_unit_invoice(cr, uid, move_line, type, context=context)		
+        return = super(StockMove, self)._get_price_unit_invoice(cr, uid, move_line, type, context=context)        
 
