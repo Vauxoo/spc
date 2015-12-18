@@ -23,6 +23,7 @@
 import copy
 from openerp import models, api
 from openerp.tools.float_utils import float_compare
+from openerp.osv import fields, osv
 
 
 class StockQuant(models.Model):
@@ -70,9 +71,8 @@ class StockQuant(models.Model):
         return res
 
 
-class StockMove(models.Model):
-
-    _inherit = 'stock.move'
+class stock_move(osv.osv):
+    _inherit = "stock.move"
 
     def force_assign(self, cr, uid, ids, context=None):
         """ Changes the state to assigned if the
@@ -87,7 +87,7 @@ class StockMove(models.Model):
             for move in self.browse(cr, uid, ids, context=context):
                 if move.location_id.usage != 'transit':
                     move_ids.append(move.id)
-        return super(StockMove, self).force_assign(
+        return super(stock_move, self).force_assign(
             cr, uid, move_ids, context=context)
 
     def _get_price_unit_invoice(self, cr, uid, move_line, type, context=None):
@@ -103,11 +103,8 @@ class StockMove(models.Model):
                 pricelist_obj = self.pool.get("product.pricelist")
                 pricelist = move_line.partner_id.property_product_pricelist_purchase.id
                 price = pricelist_obj.price_get(cr, uid, [pricelist],
-                        move_line.product_id.id, move_line.product_uom_qty, move_line.partner_id.id, {
-                            'uom': move_line.product_uom.id,
-                            'date': move_line.date,
-                            })[pricelist]
+                        move_line.product_id.id, move_line.product_uom_qty, move_line.partner_id.id)[pricelist]
                 if price:
                     return price
-        return super(StockMove, self)._get_price_unit_invoice(cr, uid, move_line, type, context=context)        
+        return super(stock_move, self)._get_price_unit_invoice(cr, uid, move_line, type, context=context)        
 
