@@ -109,5 +109,5 @@ class StockMove(models.Model):
                             })[pricelist]
                 if price:
                     return price
-        return = super(StockMove, self)._get_price_unit_invoice(cr, uid, move_line, type, context=context)        
+        return super(StockMove, self)._get_price_unit_invoice(cr, uid, move_line, type, context=context)        
 
