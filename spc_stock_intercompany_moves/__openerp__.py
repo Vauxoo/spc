@@ -33,7 +33,7 @@ Features
 * Disables to force availability in transit locations.
 * Enables to force availability just directly from pickings.""",
     'author': 'ClearCorp',
-    'depends': ['stock'],
+    'depends': ['stock_account'],
     'data': ['stock_intercompany_moves_view.xml'],
     'installable': True,
     'auto_install': False,
