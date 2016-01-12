@@ -3,11 +3,9 @@
     <data>
         <record id="purchase.purchase_form_action" model="ir.actions.act_window">
             <field name="context">{'default_picking_type_id': False}</field>
-            <field name="inherit_id" ref="purchase.purchase_order_form" />
         </record>
         <record id="purchase.purchase_rfq" model="ir.actions.act_window">
             <field name="context">{'default_picking_type_id': False}</field>
-            <field name="inherit_id" ref="purchase.purchase_order_form" />
         </record>
     </data>
 </openerp>
