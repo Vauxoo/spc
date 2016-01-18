@@ -96,7 +96,7 @@ class AccountInvoiceLine(models.Model):
             'invoice_line_tax_id': tax,
             'price_unit': vals['price_unit'],
             'price_subtotal': res.price_subtotal,
-            'invoice_id': vals['invoice_id'],
+            'invoice_id': res.invoice_id.id,
         }
         printlines_obj.create(print_lines)
         return res
