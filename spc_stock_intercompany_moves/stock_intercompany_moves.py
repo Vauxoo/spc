@@ -23,7 +23,7 @@
 import copy
 from openerp import models, api
 from openerp.tools.float_utils import float_compare
-from openerp.osv import fields, osv
+from openerp import SUPERUSER_ID
 
 
 class StockQuant(models.Model):
@@ -70,9 +70,56 @@ class StockQuant(models.Model):
                     offset += 10
         return res
 
+    def _quant_split(self, cr, uid, quant, qty, context=None):
+        res = super(StockQuant, self)._quant_split(
+                                        cr, uid, quant, qty, context=None)
+        if 'transit_company_id' in context:
+            self.write(
+                cr, SUPERUSER_ID, quant.id, {
+                    'company_id': context['transit_company_id']},
+                context=context)
+        return res
 
-class stock_move(osv.osv):
-    _inherit = "stock.move"
+    def quants_move(self, cr, uid, quants, move, location_to,
+                    location_from=False, lot_id=False, owner_id=False,
+                    src_package_id=False, dest_package_id=False, context=None):
+        if move.location_dest_id.usage == 'transit':
+            if not context:
+                context = {}
+            if move.partner_id.ref_companies:
+                ctx = context.copy()
+                ctx.update({
+                    'transit_company_id': move.partner_id.ref_companies.id
+                })
+                return super(StockQuant, self).quants_move(
+                    cr, uid, quants, move, location_to,
+                    location_from=location_from, lot_id=lot_id,
+                    owner_id=owner_id, src_package_id=src_package_id,
+                    dest_package_id=dest_package_id, context=ctx)
+        return super(StockQuant, self).quants_move(
+                    cr, uid, quants, move, location_to,
+                    location_from=location_from, lot_id=lot_id,
+                    owner_id=owner_id, src_package_id=src_package_id,
+                    dest_package_id=dest_package_id, context=context)
+
+
+class StockMove(models.Model):
+
+    _inherit = 'stock.move'
+
+    def quants_reserve(self, cr, uid, quants, move, link=False, context=None):
+        if move.location_dest_id.usage == 'transit':
+            if not context:
+                context = {}
+            if move.partner_id.ref_companies:
+                ctx = context.copy()
+                ctx.update({
+                    'transit_company_id': move.partner_id.ref_companies.id
+                })
+                return super(StockMove, self).quants_reserve(
+                    cr, uid, quants, move, link=link, context=ctx)
+        return super(StockMove, self).quants_reserve(
+                    cr, uid, quants, move, link=link, context=context)
 
     def force_assign(self, cr, uid, ids, context=None):
         """ Changes the state to assigned if the
@@ -87,7 +134,7 @@ class stock_move(osv.osv):
             for move in self.browse(cr, uid, ids, context=context):
                 if move.location_id.usage != 'transit':
                     move_ids.append(move.id)
-        return super(stock_move, self).force_assign(
+        return super(StockMove, self).force_assign(
             cr, uid, move_ids, context=context)
 
     def _get_price_unit_invoice(self, cr, uid, move_line, type, context=None):
@@ -98,13 +145,17 @@ class stock_move(osv.osv):
         """
         if context is None:
             context = {}
-        if type in ('in_invoice', 'in_refund') and move_line.location_id.usage == 'transit':
-            if move_line.partner_id and move_line.partner_id.property_product_pricelist_purchase:
+        if type in ('in_invoice', 'in_refund') and \
+                move_line.location_id.usage == 'transit':
+            if move_line.partner_id and \
+                    move_line.partner_id.property_product_pricelist_purchase:
                 pricelist_obj = self.pool.get("product.pricelist")
                 pricelist = move_line.partner_id.property_product_pricelist_purchase.id
-                price = pricelist_obj.price_get(cr, uid, [pricelist],
-                        move_line.product_id.id, move_line.product_uom_qty, move_line.partner_id.id)[pricelist]
+                price = pricelist_obj.price_get(
+                    cr, uid, [pricelist], move_line.product_id.id,
+                    move_line.product_uom_qty,
+                    move_line.partner_id.id)[pricelist]
                 if price:
                     return price
-        return super(stock_move, self)._get_price_unit_invoice(cr, uid, move_line, type, context=context)        
-
+        return super(StockMove, self)._get_price_unit_invoice(
+            cr, uid, move_line, type, context=context)
