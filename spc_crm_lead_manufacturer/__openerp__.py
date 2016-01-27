@@ -29,7 +29,7 @@
     'author': 'ClearCorp',
     'website': 'http://clearcorp.cr',
     'depends': ['crm', 'product_brand'],
-    'data': ['spc_crm_lead_manufacturer.xml'],
+    'data': ['security/ir.model.access.csv', 'spc_crm_lead_manufacturer.xml'],
     'test': [],
     'demo': [],
     'installable': True,
