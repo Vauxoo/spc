@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+    <data>
+        <record id="spc_crm_lead_manufacturer" model="ir.ui.view">
+            <field name="name">SPC CRM Lead Manufacturer</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_form_view_oppor" />
+            <field name="priority" eval="100" />
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet/div[@class='oe_title']/h2" position="after">
+                    <group>
+                        <group>
+                            <br />
+                            <table
+                                style="padding-top:20px;padding-bottom:20px;padding-left: 20px">
+                                <th>
+                                    <td>
+                                        <b>Costo</b>
+                                    </td>
+                                    <td>
+                                        <b>Margen</b>
+                                    </td>
+                                </th>
+                                <tr>
+                                    <td style="padding-right:10px">Productos</td>
+                                    <td style="padding-right:10px">
+                                        <field class="oe_inline"
+                                            widget="monetary"
+                                            options="{'currency_field': 'company_currency'}"
+                                            name="x_planned_cost_product" />
+                                    </td>
+                                    <td>
+                                        <field class="oe_inline"
+                                            widget="monetary"
+                                            options="{'currency_field': 'company_currency'}"
+                                            name="x_planned_margin_product" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-right:10px">Servicios Ing.</td>
+                                    <td style="padding-right:10px">
+                                        <field class="oe_inline"
+                                            widget="monetary"
+                                            options="{'currency_field': 'company_currency'}"
+                                            name="x_planned_cost_services_eng" />
+                                    </td>
+                                    <td>
+                                        <field class="oe_inline"
+                                            widget="monetary"
+                                            options="{'currency_field': 'company_currency'}"
+                                            name="x_planned_margin_services_eng" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-right:10px">Servicios Adm.</td>
+                                    <td style="padding-right:10px">
+                                        <field class="oe_inline"
+                                            widget="monetary"
+                                            options="{'currency_field': 'company_currency'}"
+                                            name="x_planned_cost_services_adm" />
+                                    </td>
+                                    <td>
+                                        <field class="oe_inline"
+                                            widget="monetary"
+                                            options="{'currency_field': 'company_currency'}"
+                                            name="x_planned_margin_services_adm" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-right:10px">
+                                        <b>TOTAL</b>
+                                    </td>
+                                    <td style="padding-right:10px">
+                                        <b>
+                                            <field class="oe_inline"
+                                                widget="monetary"
+                                                options="{'currency_field': 'company_currency'}"
+                                                name="planned_cost" />
+                                        </b>
+                                    </td>
+                                    <td>
+                                        <b>
+                                            <field class="oe_inline"
+                                                widget="monetary"
+                                                options="{'currency_field': 'company_currency'}"
+                                                name="x_planned_margin" />
+                                        </b>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br />
+                        </group>
+                        <group>
+                            <field name="manufacturer_line_ids" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="product_brand_id" required="True" />
+                                    <field name="code" required="True"/>
+                                    <field name="estimate" sum="Estimate Total" required="True"/>
+                                    <field name="total" sum="Total" required="True"/>
+                                </tree>
+                            </field>
+                        </group>
+
+                    </group>
+                </xpath>
+                <xpath expr="//form/sheet/group/group/field[@name='date_deadline']" position="before">
+                    <field name="projection" required="True"/>
+                </xpath>
+                <xpath expr="//form/sheet/group/group/field[@name='date_deadline']" position="after">
+                    <field name="principal_address" required="True" />
+                </xpath>
+                
+            </field>
+        </record>
+    </data>
+</openerp>
