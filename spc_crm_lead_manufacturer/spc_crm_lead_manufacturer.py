@@ -46,11 +46,11 @@ class CRMLead(models.Model):
         for line in self.manufacturer_line_ids:
             estimate_total += line.estimate
             total += line.total
-        if math.fabs(self.x_planned_cost_product - total) > 10:
-            raise ValidationError("Estimate total must be equal to 100%")
-        if math.fabs(100 - estimate_total) > 100:
+        if math.fabs(self.x_planned_cost_product - total) > 100:
             raise ValidationError("Total must be equal to product cost (" +
-                                  str(total) + ")")
+                                  str(self.x_planned_cost_product) + ")")
+        if math.fabs(100 - estimate_total) > 10:
+            raise ValidationError("Estimate total must be equal to 100%")
 
 
 class CRMManufacturerLine(models.Model):
