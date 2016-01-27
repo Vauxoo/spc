@@ -25,7 +25,7 @@
     'version': '1.0',
     'category': 'Customer Relationship Management',
     'sequence': 10,
-    'summary': 'Custom module',
+    'summary': 'Custom module to track manufacturer forecasts',
     'author': 'ClearCorp',
     'website': 'http://clearcorp.cr',
     'depends': ['crm', 'product_brand'],

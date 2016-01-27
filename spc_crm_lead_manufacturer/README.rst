@@ -2,11 +2,11 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-======================================
+=========================
 SPC CRM Lead Manufacturer
-======================================
+=========================
 
-This module was written to extend the functionality of CRM Lead
+This custom module was written to extend the functionality of CRM Lead
 
 Credits
 =======
