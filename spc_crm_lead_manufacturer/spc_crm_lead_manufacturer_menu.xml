@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record model="ir.actions.act_window" id="action_lead_manufacturer_wizard">
+            <field name="name">Report Wizard</field>
+            <field name="res_model">spc.crm.lead.manufacturer.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        <menuitem id="menu_lead_manufacturer_wizard" name="Report Wizard"
+            parent="base.next_id_64" sequence="30" action="action_lead_manufacturer_wizard"/>
+    </data>
+</openerp>

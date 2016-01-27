@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+                <!-- Stock Move Report -->
+        <record id="view_lead_manufacturer_wizard_form" model="ir.ui.view">
+            <field name="name">Manufacturer wizard form</field>
+            <field name="model">spc.crm.lead.manufacturer.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                 <form string="Report Options">
+                    <group>
+                        <group>
+                            <field name="partner_ids"/>
+                            <field name="company_ids"/>
+                        </group>
+                        <group></group>
+                    </group>
+                    <footer>
+                        <!-- button name="print_report" string="Print" type="object" default_focus="1" class="oe_highlight"/>
+                        or 
+                        <button string="Cancel" class="oe_link" special="cancel" /-->
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</openerp>
