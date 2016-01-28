@@ -26,5 +26,31 @@ class CRMManufacturerLineWizard(models.TransientModel):
     _name = 'spc.crm.lead.manufacturer.wizard'
 
     user_ids = fields.Many2many(
-        'res.user', string='Comercials')
-    company_ids = fields.Many2many('res.company', string='Company')
+        'res.users', string='Salesperson')
+    company_ids = fields.Many2many(
+        'res.company', string='Company', required=True)
+
+    def print_report(self, cr, uid, ids, context=None):
+        """#line_obj = self.pool.get('account.analytic.line')
+        data = {}
+        data['form'] = self.read(cr, uid , ids, context=context)[0]
+        ids_chk = line_obj.search(cr, uid, [
+                ('date', '>=', data['form']['date_from']),
+                ('date', '<=', data['form']['date_to']),
+                ('journal_id', 'in', data['form']['journal_ids']),
+                ('user_id', 'in', data['form']['employee_ids']),
+                ], context=context)
+        if not ids_chk:
+            raise osv.except_osv(_('Insufficient Data!'), _('No record(s) found for this report.'))
+
+        data['form']['journal_ids'] = [(6, 0, data['form']['journal_ids'])] # Improve me => Change the rml/sxw so that it can support withou [0][2]
+        data['form']['employee_ids'] = [(6, 0, data['form']['employee_ids'])]
+        datas = {
+            'ids': [], # LEADS
+            'model': 'account.analytic.line',# crm.lead
+            'form': data['form']
+        }"""
+        datas = {}
+        return self.pool['report'].get_action(
+            cr, uid, [], 'spc_crm_lead_manufacturer.report_lead_manufacturer', data=datas, context=context
+        )
