@@ -10,7 +10,9 @@
                  <form string="Report Options">
                     <group>
                         <group>
-                            <field name="partner_ids"/>
+                            <field name="user_ids" context="{'default_groups_ref': 
+                            ['base.group_user', 'base.group_partner_manager', 
+                            'base.group_sale_salesman_all_leads']}"/>
                             <field name="company_ids"/>
                         </group>
                         <group></group>

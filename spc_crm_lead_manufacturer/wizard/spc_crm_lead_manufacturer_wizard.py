@@ -25,6 +25,6 @@ from openerp import models, fields
 class CRMManufacturerLineWizard(models.TransientModel):
     _name = 'spc.crm.lead.manufacturer.wizard'
 
-    partner_ids = fields.Many2many(
-        'res.partner', string='Comercial', domain='')
+    user_ids = fields.Many2many(
+        'res.user', string='Comercials')
     company_ids = fields.Many2many('res.company', string='Company')
