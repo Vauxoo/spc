@@ -7,7 +7,7 @@
             <field name="view_mode">form</field>
             <field name="target">new</field>
         </record>
-        <menuitem id="menu_lead_manufacturer_wizard" name="Report Wizard"
-            parent="base.next_id_64" sequence="30" action="action_lead_manufacturer_wizard"/>
+        <menuitem id="menu_lead_manufacturer_wizard" name="Leads Forecast"
+            parent="base.menu_reporting_dashboard" sequence="30" action="action_lead_manufacturer_wizard"/>
     </data>
 </openerp>
