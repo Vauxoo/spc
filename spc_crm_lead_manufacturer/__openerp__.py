@@ -28,7 +28,7 @@
     'summary': 'Custom module to track manufacturer forecasts',
     'author': 'ClearCorp',
     'website': 'http://clearcorp.cr',
-    'depends': ['crm', 'product_brand'],
+    'depends': ['base', 'crm', 'product_brand'],
     'data': ['security/ir.model.access.csv', 'spc_crm_lead_manufacturer.xml',
              'spc_crm_lead_manufacturer_menu.xml',
              'wizard/spc_crm_lead_manufacturer_wizard.xml'],
