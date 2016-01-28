@@ -23,7 +23,6 @@
 from openerp import models, fields, api
 from openerp.exceptions import ValidationError
 from openerp.tools.translate import _
-from openerp import tools
 import math
 
 
@@ -66,8 +65,8 @@ class CRMLead(models.Model):
         if (self.projection == 'sold'):
             if not (self.stage_id.id == res_id):
                 raise ValidationError(
-                    _('Projection can\'t be Sold when the opportunity isn\'t '
-                      + 'Won'))
+                    _('Projection can\'t be Sold when the '
+                      'opportunity isn\'t Won'))
 
 
 class CRMManufacturerLine(models.Model):
