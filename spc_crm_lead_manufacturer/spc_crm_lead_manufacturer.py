@@ -22,6 +22,7 @@
 
 from openerp import models, fields, api
 from openerp.exceptions import ValidationError
+from openerp.tools.translate import _
 import math
 
 
@@ -30,7 +31,7 @@ class CRMLead(models.Model):
 
     projection = fields.Selection([
         ('sold', 'Sold'), ('committed', 'Commited'), ('expected', 'Expected'),
-        ('none', 'None')], string='Projection', default='sold')
+        ('none', 'None')], string='Projection', default='none')
     principal_address = fields.Selection([
         ('cibersecurity', 'CyberSecurity'), ('datacenter', 'DataCenter'),
         ('it_services', 'IT Services'), ('networking', 'Networking')],
@@ -46,18 +47,33 @@ class CRMLead(models.Model):
         for line in self.manufacturer_line_ids:
             estimate_total += line.estimate
             total += line.total
-        if math.fabs(self.x_planned_cost_product - total) > 100:
-            raise ValidationError("Total must be equal to product cost (" +
-                                  str(self.x_planned_cost_product) + ")")
-        if math.fabs(100 - estimate_total) > 10:
-            raise ValidationError("Estimate total must be equal to 100%")
+        if self.manufacturer_line_ids:
+            if math.fabs(self.x_planned_cost_product - total) > 10:
+                raise ValidationError(_(
+                    'Total must be equal to product '
+                    'cost (%s)' % self.x_planned_cost_product))
+            if math.fabs(100 - estimate_total) > 1:
+                raise ValidationError(
+                    _('Estimate total must be equal to 100%'))
+
+    @api.one
+    @api.constrains('projection')
+    def _check_projection(self):
+        model_data_obj = self.pool.get('ir.model.data')
+        _id, _res_model, res_id = model_data_obj.xmlid_lookup(
+            self._cr, self._uid, 'crm.stage_lead6')
+        if (self.projection == 'sold'):
+            if not (self.stage_id.id == res_id):
+                raise ValidationError(
+                    _('Projection can\'t be Sold when the '
+                      'opportunity isn\'t Won'))
 
 
 class CRMManufacturerLine(models.Model):
     _name = 'spc.crm.lead.manufacturer.line'
 
     @api.multi
-    @api.depends('lead_id.x_planned_cost_product')
+    @api.depends('lead_id.x_planned_cost_product', 'estimate')
     def _compute_total(self):
         for line in self:
             line.total = line.lead_id.x_planned_cost_product * \
