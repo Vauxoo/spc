@@ -152,3 +152,20 @@ msgstr "TOTAL"
 msgid "Total"
 msgstr "Total"
 
+#. module: spc_crm_lead_manufacturer
+#: code:addons/spc_crm_lead_manufacturer/spc_crm_lead_manufacturer.py:58
+#, python-format
+msgid "Estimate total must be equal to 100%"
+msgstr "Total estimado debe ser igual a 100%"
+
+#. module: spc_crm_lead_manufacturer
+#: code:addons/spc_crm_lead_manufacturer/spc_crm_lead_manufacturer.py:69
+#, python-format
+msgid "Projection can't be Sold when the opportunity isn't Won"
+msgstr "La proyeción no puede ser vendido si la oportunidad no está ganado"
+
+#. module: spc_crm_lead_manufacturer
+#: code:addons/spc_crm_lead_manufacturer/spc_crm_lead_manufacturer.py:53
+#, python-format
+msgid "Total must be equal to product cost (%s)"
+msgstr "El total debe ser igual al costo de producto (%s)"
