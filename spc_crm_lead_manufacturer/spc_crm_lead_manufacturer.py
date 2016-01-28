@@ -30,7 +30,7 @@ class CRMLead(models.Model):
 
     projection = fields.Selection([
         ('sold', 'Sold'), ('committed', 'Commited'), ('expected', 'Expected'),
-        ('none', 'None')], string='Projection', default='sold')
+        ('none', 'None')], string='Projection', default='none')
     principal_address = fields.Selection([
         ('cibersecurity', 'CyberSecurity'), ('datacenter', 'DataCenter'),
         ('it_services', 'IT Services'), ('networking', 'Networking')],
