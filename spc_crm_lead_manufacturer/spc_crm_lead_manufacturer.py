@@ -35,7 +35,7 @@ class CRMLead(models.Model):
     principal_address = fields.Selection([
         ('cibersecurity', 'CyberSecurity'), ('datacenter', 'DataCenter'),
         ('it_services', 'IT Services'), ('networking', 'Networking')],
-        string='Principal Address', default='cibersecurity')
+        string='Principal Address')
     manufacturer_line_ids = fields.One2many(
         'spc.crm.lead.manufacturer.line', 'lead_id', string='Manufacturer')
 
@@ -48,11 +48,7 @@ class CRMLead(models.Model):
             estimate_total += line.estimate
             total += line.total
         if self.manufacturer_line_ids:
-            if math.fabs(self.x_planned_cost_product - total) > 10:
-                raise ValidationError(_(
-                    'Total must be equal to product '
-                    'cost (%s)' % self.x_planned_cost_product))
-            if math.fabs(100 - estimate_total) > 1:
+            if math.fabs(100.0 - estimate_total) != 100.0:
                 raise ValidationError(
                     _('Estimate total must be equal to 100%'))
 
@@ -83,7 +79,7 @@ class CRMManufacturerLine(models.Model):
     lead_id = fields.Many2one('crm.lead', string='Lead')
     product_brand_id = fields.Many2one('product.brand', string='Manufacturer')
     code = fields.Char('Code')
-    estimate = fields.Float(string='Estimate')
+    estimate = fields.Float(string='Estimate %')
     total = fields.Float(string="Total", compute='_compute_total')
 
 
