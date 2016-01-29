@@ -21,3 +21,4 @@
 ##############################################################################
 import spc_crm_lead_manufacturer
 import wizard
+import report

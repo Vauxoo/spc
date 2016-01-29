@@ -19,7 +19,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields
+
+from openerp import models, fields, api
 
 
 class CRMManufacturerLineWizard(models.TransientModel):
@@ -29,28 +30,50 @@ class CRMManufacturerLineWizard(models.TransientModel):
         'res.users', string='Salesperson')
     company_ids = fields.Many2many(
         'res.company', string='Company', required=True)
+    date_from = fields.Date('Start Date', required=True)
+    date_to = fields.Date('End Date', required=True)
 
-    def print_report(self, cr, uid, ids, context=None):
-        """#line_obj = self.pool.get('account.analytic.line')
-        data = {}
-        data['form'] = self.read(cr, uid , ids, context=context)[0]
-        ids_chk = line_obj.search(cr, uid, [
-                ('date', '>=', data['form']['date_from']),
-                ('date', '<=', data['form']['date_to']),
-                ('journal_id', 'in', data['form']['journal_ids']),
-                ('user_id', 'in', data['form']['employee_ids']),
-                ], context=context)
-        if not ids_chk:
-            raise osv.except_osv(_('Insufficient Data!'), _('No record(s) found for this report.'))
-
-        data['form']['journal_ids'] = [(6, 0, data['form']['journal_ids'])] # Improve me => Change the rml/sxw so that it can support withou [0][2]
-        data['form']['employee_ids'] = [(6, 0, data['form']['employee_ids'])]
-        datas = {
-            'ids': [], # LEADS
-            'model': 'account.analytic.line',# crm.lead
-            'form': data['form']
-        }"""
+    @api.multi
+    def print_report(self):
         datas = {}
+        if not self.env['res.users'].has_group('base.group_sale_manager'):
+            self.user_ids = [self._uid]
+            datas['user_id'] = self._uid
+        leads = []
+        query_date = """SELECT EXTRACT(YEAR FROM date_deadline) as year,
+            EXTRACT(MONTH FROM date_deadline) as month
+            FROM crm_lead
+            WHERE date_deadline >= %s
+            AND date_deadline <= %s
+            AND company_id IN %s
+            AND user_id IN %s
+            GROUP BY year, month
+            ORDER BY year, month ASC;"""
+        self._cr.execute(
+            query_date, (
+                self.date_from, self.date_to,
+                tuple(self.company_ids._ids),
+                tuple(self.user_ids._ids)))
+        dates = self._cr.fetchall()
+        for year, month in dates:
+            query = """SELECT id, user_id
+FROM crm_lead
+WHERE date_deadline >= %s
+AND date_deadline <= %s
+AND company_id IN %s
+AND user_id IN %s
+AND EXTRACT(YEAR FROM date_deadline) = %s
+AND EXTRACT(MONTH FROM date_deadline) = %s;"""
+            self._cr.execute(
+                query, (
+                    self.date_from, self.date_to,
+                    tuple(self.company_ids._ids),
+                    tuple(self.user_ids._ids),
+                    year, month))
+            leads.append((
+                year, month, [item[0] for item in self._cr.fetchall()],))
+        datas['leads'] = leads
         return self.pool['report'].get_action(
-            cr, uid, [], 'spc_crm_lead_manufacturer.report_lead_manufacturer', data=datas, context=context
+            self._cr, self._uid, [], 'spc_crm_lead_manufacturer.report_lead_manufacturer',
+            data=datas, context=self._context
         )
