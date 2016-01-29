@@ -92,8 +92,8 @@
                             <br />
                         </group>
                         <group colspan="2">
-                            <field name="manufacturer_line_ids" nolabel="1">
-                                <tree editable="bottom">
+                            <field name="manufacturer_line_ids" nolabel="1" required="True">
+                                <tree editable="bottom" >
                                     <field name="product_brand_id" required="True" />
                                     <field name="code" required="True"/>
                                     <field name="estimate" sum="Estimate Total" required="True"/>

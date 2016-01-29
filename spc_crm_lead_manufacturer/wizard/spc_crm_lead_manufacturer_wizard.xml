@@ -9,9 +9,15 @@
             <field name="arch" type="xml">
                  <form string="Report Options">
                     <group>
-                        <field name="user_ids" groups="base.group_sale_manager"/>
-                        <field name="company_ids" domain="[('user_ids', '=', uid)]"/>
+                        <group>
+                            <field name="date_from"/>
+                        </group>
+                        <group>
+                            <field name="date_to"/>
+                        </group>
                     </group>
+                    <field name="user_ids" groups="base.group_sale_manager"/>
+                    <field name="company_ids" domain="[('user_ids', '=', uid)]"/>
                     <footer>
                         <button name="print_report" string="Print" type="object" default_focus="1" class="oe_highlight"/>
                         or 
