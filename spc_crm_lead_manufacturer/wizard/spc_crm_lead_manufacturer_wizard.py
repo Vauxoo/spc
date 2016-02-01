@@ -45,35 +45,55 @@ class CRMManufacturerLineWizard(models.TransientModel):
             FROM crm_lead
             WHERE date_deadline >= %s
             AND date_deadline <= %s
-            AND company_id IN %s
-            AND user_id IN %s
+            AND company_id IN %s"""
+        if self.user_ids._ids:
+            query_date += """AND user_id IN %s
             GROUP BY year, month
             ORDER BY year, month ASC;"""
-        self._cr.execute(
-            query_date, (
-                self.date_from, self.date_to,
-                tuple(self.company_ids._ids),
-                tuple(self.user_ids._ids)))
+            self._cr.execute(
+                query_date, (
+                    self.date_from, self.date_to,
+                    tuple(self.company_ids._ids),
+                    tuple(self.user_ids._ids)))
+        else:
+            query_date += """GROUP BY year, month
+            ORDER BY year, month ASC;"""
+            self._cr.execute(
+                query_date, (
+                    self.date_from, self.date_to,
+                    tuple(self.company_ids._ids),))
         dates = self._cr.fetchall()
         for year, month in dates:
             query = """SELECT id, user_id
-FROM crm_lead
-WHERE date_deadline >= %s
-AND date_deadline <= %s
-AND company_id IN %s
-AND user_id IN %s
-AND EXTRACT(YEAR FROM date_deadline) = %s
-AND EXTRACT(MONTH FROM date_deadline) = %s;"""
-            self._cr.execute(
-                query, (
-                    self.date_from, self.date_to,
-                    tuple(self.company_ids._ids),
-                    tuple(self.user_ids._ids),
-                    year, month))
+            FROM crm_lead
+            WHERE date_deadline >= %s
+            AND date_deadline <= %s
+            AND company_id IN %s"""
+            if self.user_ids._ids:
+                query += """AND user_id IN %s
+                AND EXTRACT(YEAR FROM date_deadline) = %s
+                AND EXTRACT(MONTH FROM date_deadline) = %s
+                ORDER BY date_deadline;"""
+                self._cr.execute(
+                    query, (
+                        self.date_from, self.date_to,
+                        tuple(self.company_ids._ids),
+                        tuple(self.user_ids._ids),
+                        year, month))
+            else:
+                query += """AND EXTRACT(YEAR FROM date_deadline) = %s
+                AND EXTRACT(MONTH FROM date_deadline) = %s
+                ORDER BY date_deadline;"""
+                self._cr.execute(
+                    query, (
+                        self.date_from, self.date_to,
+                        tuple(self.company_ids._ids),
+                        year, month))
             leads.append((
                 year, month, [item[0] for item in self._cr.fetchall()],))
         datas['leads'] = leads
         return self.pool['report'].get_action(
-            self._cr, self._uid, [], 'spc_crm_lead_manufacturer.report_lead_manufacturer',
+            self._cr, self._uid, [],
+            'spc_crm_lead_manufacturer.report_lead_manufacturer',
             data=datas, context=self._context
         )
