@@ -20,7 +20,7 @@
                             <tbody>
                                 <tr><td></td></tr>
                                 <tr>
-                                    <td easyfx=" pattern: back_color font: bold on;borders: bottom medium, top medium, left medium, right medium;">Comercial:</td>
+                                    <td easyfx="font: bold on;borders: bottom medium, top medium, left medium, right medium;">Comercial:</td>
                                     <td easyfx="font: bold on;borders: bottom medium, top medium, left medium, right medium;"><span t-esc="get_user(data['user_id']).name"/></td>
                                 </tr>
                                 <tr><td></td></tr>
