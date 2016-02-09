@@ -8,12 +8,15 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                  <form string="Report Options">
-                    <group>
+                    <group col="3">
                         <group>
                             <field name="date_from"/>
                         </group>
                         <group>
                             <field name="date_to"/>
+                        </group>
+                        <group>
+                            <field name="principal_address"/>
                         </group>
                     </group>
                     <field name="user_ids" groups="base.group_sale_manager"/>
