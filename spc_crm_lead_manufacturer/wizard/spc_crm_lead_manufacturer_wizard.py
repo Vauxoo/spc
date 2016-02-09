@@ -32,6 +32,10 @@ class CRMManufacturerLineWizard(models.TransientModel):
         'res.company', string='Company', required=True)
     date_from = fields.Date('Start Date', required=True)
     date_to = fields.Date('End Date', required=True)
+    principal_address = fields.Selection([
+        ('cibersecurity', 'CyberSecurity'), ('datacenter', 'DataCenter'),
+        ('it_services', 'IT Services'), ('networking', 'Networking')],
+        string='Principal Address')
 
     @api.multi
     def print_report(self):
@@ -53,54 +57,40 @@ class CRMManufacturerLineWizard(models.TransientModel):
         )
 
     def _get_query_date(self):
+        args = [self.date_from, self.date_to, tuple(self.company_ids._ids)]
         query_date = """SELECT EXTRACT(YEAR FROM date_deadline) as year,
             EXTRACT(MONTH FROM date_deadline) as month
             FROM crm_lead
             WHERE date_deadline >= %s
             AND date_deadline <= %s
-            AND company_id IN %s"""
+            AND company_id IN %s """
+        if self.principal_address:
+            query_date += """ AND principal_address IN %s """
+            args.append(tuple([self.principal_address]))
         if self.user_ids._ids:
-            query_date += """AND user_id IN %s
-            GROUP BY year, month
+            query_date += """AND user_id IN %s """
+            args.append(tuple(self.user_ids._ids))
+        query_date += """GROUP BY year, month
             ORDER BY year, month ASC;"""
-            self._cr.execute(
-                query_date, (
-                    self.date_from, self.date_to,
-                    tuple(self.company_ids._ids),
-                    tuple(self.user_ids._ids)))
-        else:
-            query_date += """GROUP BY year, month
-            ORDER BY year, month ASC;"""
-            self._cr.execute(
-                query_date, (
-                    self.date_from, self.date_to,
-                    tuple(self.company_ids._ids),))
+        self._cr.execute(query_date, tuple(args))
         return self._cr.fetchall()
 
     def _get_query(self, year, month):
+        args = [self.date_from, self.date_to, tuple(self.company_ids._ids)]
         query = """SELECT id, user_id
             FROM crm_lead
             WHERE date_deadline >= %s
             AND date_deadline <= %s
             AND company_id IN %s"""
+        if self.principal_address:
+            query += """AND principal_address IN %s """
+            args.append(tuple([self.principal_address]))
         if self.user_ids._ids:
-            query += """AND user_id IN %s
-            AND EXTRACT(YEAR FROM date_deadline) = %s
-            AND EXTRACT(MONTH FROM date_deadline) = %s
-            ORDER BY date_deadline;"""
-            self._cr.execute(
-                query, (
-                    self.date_from, self.date_to,
-                    tuple(self.company_ids._ids),
-                    tuple(self.user_ids._ids),
-                    year, month))
-        else:
-            query += """AND EXTRACT(YEAR FROM date_deadline) = %s
-            AND EXTRACT(MONTH FROM date_deadline) = %s
-            ORDER BY date_deadline;"""
-            self._cr.execute(
-                query, (
-                    self.date_from, self.date_to,
-                    tuple(self.company_ids._ids),
-                    year, month))
+            query += """AND user_id IN %s """
+            args.append(tuple(self.user_ids._ids))
+        query += """AND EXTRACT(YEAR FROM date_deadline) = %s
+        AND EXTRACT(MONTH FROM date_deadline) = %s
+        ORDER BY date_deadline;"""
+        args += [year, month]
+        self._cr.execute(query, tuple(args))
         return self._cr.fetchall()
