@@ -58,7 +58,7 @@ msgstr "Descuento ("
 #. module: spc_account_invoice_report
 #: view:website:account.report_invoice_document
 msgid "Exempt Amount"
-msgstr "Importe excento"
+msgstr "Importe exento"
 
 #. module: spc_account_invoice_report
 #: view:website:account.report_invoice_document
