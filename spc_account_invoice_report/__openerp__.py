@@ -23,6 +23,7 @@
     ],
     'data': [
         'data/report.paperformat.xml',
+        'data/spc_report_invoice.xml',
         'views/spc_account_invoice_report.xml',
     ],
 }
