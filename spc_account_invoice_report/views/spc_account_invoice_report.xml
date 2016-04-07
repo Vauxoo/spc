@@ -487,28 +487,45 @@
                                     <tr>
                                         <t t-if="o.type == 'out_invoice' or o.type == 'out_refund'">
                                             <td style="text-align:left; padding-top: 5px;" width="100%">
-                                                <span style="white-space: pre;">   </span>
                                                 <strong>Customer:</strong>
                                                 <span t-field="o.partner_id"/>
                                             </td>
                                         </t>
                                         <t t-if="o.type == 'in_invoice' or o.type == 'in_refund'">
                                             <td style="text-align:left; padding-top: 5px;" width="100%">
-                                                <span style="white-space: pre;">   </span>
                                                 <strong>Supplier:</strong>
                                                 <u><span t-field="o.partner_id"/></u>
                                             </td>
                                         </t>
                                     </tr>
                                     <tr>
-                                        <td style="text-align:left; padding-bottom:5px;" width="100%">
-                                            <span style="white-space: pre;">   </span>
+                                        <td style="text-align:left; padding: 5px;" width="100%">
                                             <strong>Addres:</strong>
-                                            <span t-field="o.partner_id.street"/>
-                                            <span t-field="o.partner_id.street2"/>
+                                            <t t-if="o.partner_id.street">
+                                                <span t-field="o.partner_id.street"/>
+                                                <span style="white-space: pre;">, </span>
+                                            </t>
+                                            <t t-if="o.partner_id.street2">
+                                                <span t-field="o.partner_id.street2"/>
+                                                <span style="white-space: pre;">, </span>
+                                            </t>
+                                            <t t-if="o.partner_id.zip">
+                                                <span t-field="o.partner_id.zip"/>
+                                                <span style="white-space: pre;">, </span>
+                                            </t>
+                                            <t t-if="o.partner_id.city">
+                                                <span t-field="o.partner_id.city"/>
+                                                <span style="white-space: pre;">, </span>
+                                            </t>
+                                            <t t-if="o.partner_id.state_id">
+                                                <span t-field="o.partner_id.state_id"/>
+                                                <span style="white-space: pre;">, </span>
+                                            </t>
+                                            <t t-if="o.partner_id.country_id">
+                                                <span t-field="o.partner_id.country_id"/>
+                                            </t>
                                         </td>
                                     </tr>
-                                    
                                 </table>
                             </div>
                         </div>
@@ -620,7 +637,7 @@
                     </div>
                     <br/>
                     <br/>
-                    <div class="footer" style="font-size:15px;">
+                    <div class="footer">
                         <div class="text-center" style="border-top: 1px solid black; font-size: 85%">
                             <ul class="list-inline">
                                 <t t-if="company.custom_footer">

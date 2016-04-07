@@ -63,7 +63,7 @@ msgstr "DIA"
 #. module: spc_account_invoice_report
 #: view:website:account.report_invoice_document
 msgid "DISCOUNT"
-msgstr "DISCUENTO"
+msgstr "DESCUENTO"
 
 #. module: spc_account_invoice_report
 #: view:website:account.report_invoice_document
