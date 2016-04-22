@@ -486,13 +486,13 @@
                                 <table width="100%" style="border:2px solid black;border-radius:8px; border-collapse:separate;">
                                     <tr>
                                         <t t-if="o.type == 'out_invoice' or o.type == 'out_refund'">
-                                            <td style="text-align:left; padding-top: 5px;" width="100%">
+                                            <td style="text-align:left; padding: 5px;" width="100%">
                                                 <strong>Customer:</strong>
                                                 <span t-field="o.partner_id"/>
                                             </td>
                                         </t>
                                         <t t-if="o.type == 'in_invoice' or o.type == 'in_refund'">
-                                            <td style="text-align:left; padding-top: 5px;" width="100%">
+                                            <td style="text-align:left; padding: 5px;" width="100%">
                                                 <strong>Supplier:</strong>
                                                 <u><span t-field="o.partner_id"/></u>
                                             </td>
@@ -563,39 +563,43 @@
                         <div class="row">
                             <br/>
                             <div class="col-xs-6" style="page-break-inside:avoid">
-                                <table width="100%" style="border:2px solid black;border-radius:8px; border-collapse:separate;">
-                                    <tr>
-                                        <td style="text-align:center; padding: 5px;" width="100%">
-                                            <span t-field="o.comment"/>
-                                        </td>
-                                    </tr>
-                                </table>
+                                <t t-if="o.comment">
+	                                <table width="100%" style="border:2px solid black;border-radius:8px; border-collapse:separate;">
+	                                    <tr>
+	                                        <td style="text-align:center; padding: 5px;" width="100%">
+	                                            <span t-field="o.comment"/>
+	                                        </td>
+	                                    </tr>
+	                                </table>
+                                </t>
                             </div>
                             <div class="col-xs-2">
                                 <span style="white-space: pre;">   </span>
                             </div>
                             <div class="col-xs-4" style="page-break-inside:avoid">
                                 <table width="100%" style="border:2px solid black;border-radius:8px; border-collapse:separate;">
-                                    <tr>
+                                    <tr class="text-right">
                                         <td style="border-right:1px solid black;border-bottom:1px solid black;padding: 5px;"><span>SUB-TOTAL</span></td>
                                         <td class="text-right" style="border-bottom:1px solid black;padding: 5px;">
                                             <span t-field="o.amount_untaxed" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <tr t-if="o.amount_discounted != 0.0" class="text-right">
                                         <td style="border-right:1px solid black;border-bottom:1px solid black;padding: 5px;"><span>DISCOUNT</span></td>
                                         <td class="text-right" style="border-bottom:1px solid black;padding: 5px;">
-                                            <span t-field="o.amount_tax" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+                                            <span t-field="o.amount_discounted" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td style="border-right:1px solid black;padding: 5px;"><span>TAXES</span></td>
-                                        <td class="text-right" style="border-bottom:1px solid black;padding: 5px;">
-                                            <span t-field="o.amount_tax" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="border-top:1px solid black;border-right:1px solid black;padding: 5px;"><span>INVOICE TOTAL </span></td>
+                                    <t t-if="o.amount_tax">
+	                                    <tr class="text-right">
+	                                        <td style="border-right:1px solid black;border-bottom:1px solid black; padding: 5px;"><span>TAXES</span></td>
+	                                        <td class="text-right" style="border-bottom:1px solid black;padding: 5px;">
+	                                            <span t-field="o.amount_tax" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+	                                        </td>
+	                                    </tr>
+	                                </t>
+                                    <tr t-if="o.amount_total != 0.0" class="text-right">
+                                        <td style="border-right:1px solid black;padding: 5px;"><span>INVOICE TOTAL </span></td>
                                         <td class="text-right" style="padding: 5px;">
                                             <span t-field="o.amount_total" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
                                         </td>
