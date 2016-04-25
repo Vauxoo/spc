@@ -30,50 +30,59 @@ class account_invoice(models.Model):
 
     @api.multi
     def invoice_validate(self):
-        res = super(account_invoice, self).invoice_validate()
-        if abs(self.amount_untaxed - self.subtotal_print) > 10:
-            raise Warning (_('Subtotals are different .'))
-        if abs(self.amount_tax - self.amount_tax_print) > 10:
-            raise Warning (_('Taxes are different.'))
-        if abs(self.invoice_discount - self.discount_print) > 10:
-            raise Warning (_('Discount are different.'))
-        if abs(self.amount_total - self.total_print) > 10:
-            raise Warning (_('Totals are different.'))
+        if self.type == "out_invoice":
+            res = super(account_invoice, self).invoice_validate()
+            if abs(self.amount_untaxed - self.subtotal_print) > 10:
+                raise Warning(_('Subtotals are different .'))
+            if abs(self.amount_tax - self.amount_tax_print) > 10:
+                raise Warning(_('Taxes are different.'))
+            if abs(self.invoice_discount - self.discount_print) > 10:
+                raise Warning(_('Discount are different.'))
+            if abs(self.amount_total - self.total_print) > 10:
+                raise Warning(_('Totals are different.'))
+        else:
+            res = super(account_invoice, self).invoice_validate()
         return res
-    
+
     @api.multi
     def button_copy_amounts(self):
-        ctx = dict(self._context)
         for invoice in self:
             invoice.write({
-                'subtotal_print' :invoice.amount_untaxed_not_discounted,
-                'amount_tax_print' : invoice.amount_tax,
-                'discount_print' : invoice.invoice_discount,
-                'total_print' : invoice.amount_total,
+                'subtotal_print': invoice.amount_untaxed_not_discounted,
+                'amount_tax_print': invoice.amount_tax,
+                'discount_print': invoice.invoice_discount,
+                'total_print': invoice.amount_total,
             })
         return True
 
-    print_line_ids = fields.One2many('account.invoice.printlines','invoice_id', string='Print Lines')
-    subtotal_print = fields.Float('Subtotal', digits=dp.get_precision('Account'))
-    total_print = fields.Float(string='Total', digits=dp.get_precision('Account'))
-    amount_tax_print =  fields.Float(string='Tax', digits=dp.get_precision('Account'))
-    discount_print = fields.Float('Discount', digits=dp.get_precision('Account'))
+    print_line_ids = fields.One2many('account.invoice.printlines',
+                                     'invoice_id', string='Print Lines')
+    subtotal_print = fields.Float('Subtotal',
+                                  digits=dp.get_precision('Account'))
+    total_print = fields.Float(string='Total',
+                               digits=dp.get_precision('Account'))
+    amount_tax_print = fields.Float(string='Tax',
+                                    digits=dp.get_precision('Account'))
+    discount_print = fields.Float('Discount',
+                                  digits=dp.get_precision('Account'))
+
 
 class account_invoice_printlines(models.Model):
     """Print Lines"""
 
     _name = 'account.invoice.printlines'
     _description = __doc__
-    
+
     invoice_id = fields.Many2one('account.invoice', string='Invoices')
     name = fields.Text('Description')
     quantity = fields.Float('Quant.')
     uos_id = fields.Many2one('product.uom', string='Unit of Measure',
-        ondelete='set null', index=True)
+                             ondelete='set null', index=True)
     invoice_line_tax_id = fields.Char(string='Taxes')
     discount = fields.Float('Discount')
     price_unit = fields.Float(string='Unit. Amount')
     price_subtotal = fields.Float(string='Total Amount', store=True)
+
 
 class AccountInvoiceLine(models.Model):
 
