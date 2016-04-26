@@ -23,18 +23,18 @@
 {
     'name': 'SPC Account Invoice Line',
     'version': '1.0',
-    'author' : 'ClearCorp',
+    'author': 'ClearCorp',
     'complexity': 'normal',
     'website': 'http://clearcorp.co.cr',
     'category': 'Accounting & Finance',
     'description': """
-Add the model of account invoice line new print lines 
+Add the model of account invoice line new print lines
 """,
-    'depends': ['account_invoice_discount', 'account_invoice_report',],
+    'depends': ['account_invoice_discount', 'account_invoice_report', ],
     'data': ['spc_account_invoice_line_view.xml',
              'security/ir.model.access.csv',
-            ],
-    'test' : [],
+             ],
+    'test': [],
     'demo': [],
     'license': 'AGPL-3',
     'installable': True,
