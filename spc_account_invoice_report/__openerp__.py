@@ -20,6 +20,7 @@
         'account',
         'account_invoice_report',
         'l10n_hn_company',
+        'spc_account_invoice_line',
     ],
     'data': [
         'data/report.paperformat.xml',
