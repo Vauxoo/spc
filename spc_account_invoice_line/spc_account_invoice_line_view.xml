@@ -35,7 +35,13 @@
                         <span><b>Real Lines</b></span>
                         <field name="subtotal_print" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                         <field name="amount_untaxed_not_discounted" nolabel="1" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-                        <field name="amount_tax_print" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        <div>
+                            <label for="amount_tax_print"/>
+	                        <button name="button_reset_taxes" states="draft,proforma2"
+	                            string="(update)" class="oe_link oe_edit_only"
+	                            type="object" help="Recompute taxes and total"/>
+                        </div>
+                        <field name="amount_tax_print" nolabel="1" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                         <field name="amount_tax" nolabel="1" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                         <field name="discount_print" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                         <field name="amount_discounted" nolabel="1" widget="monetary" options="{'currency_field': 'currency_id'}"/>

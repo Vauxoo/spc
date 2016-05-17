@@ -22,7 +22,7 @@
 
 {
     'name': 'SPC Account Invoice Line',
-    'version': '1.0',
+    'version': '8.0.1.0',
     'author': 'ClearCorp',
     'complexity': 'normal',
     'website': 'http://clearcorp.co.cr',

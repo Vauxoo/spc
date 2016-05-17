@@ -32,11 +32,12 @@ class account_invoice(models.Model):
     def invoice_validate(self):
         if self.type == "out_invoice":
             res = super(account_invoice, self).invoice_validate()
-            if abs(self.amount_untaxed - self.subtotal_print) > 10:
-                raise Warning(_('Subtotals are different .'))
+            if abs(self.amount_untaxed_not_discounted - self.subtotal_print)\
+                    > 10:
+                raise Warning(_('Subtotals are different.'))
             if abs(self.amount_tax - self.amount_tax_print) > 10:
                 raise Warning(_('Taxes are different.'))
-            if abs(self.invoice_discount - self.discount_print) > 10:
+            if abs(self.amount_discounted - self.discount_print) > 10:
                 raise Warning(_('Discount are different.'))
             if abs(self.amount_total - self.total_print) > 10:
                 raise Warning(_('Totals are different.'))
@@ -50,7 +51,7 @@ class account_invoice(models.Model):
             invoice.write({
                 'subtotal_print': invoice.amount_untaxed_not_discounted,
                 'amount_tax_print': invoice.amount_tax,
-                'discount_print': invoice.invoice_discount,
+                'discount_print': invoice.amount_discounted,
                 'total_print': invoice.amount_total,
             })
         return True
