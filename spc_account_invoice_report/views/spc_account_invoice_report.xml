@@ -532,6 +532,14 @@
                         <br/>
                         <div class="row">
                             <div class="col-xs-12" style="page-break-inside:avoid">
+                                <t t-if="o.comment">
+                                    <p><span><b>Note: </b></span><span t-field="o.comment"/></p>
+                                </t>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="col-xs-12" style="page-break-inside:avoid">
                                 <table width="100%" style="border:1px solid black;">
                                     <thead>
                                         <tr>
@@ -564,15 +572,16 @@
                         <div class="row">
                             <br/>
                             <div class="col-xs-6" style="page-break-inside:avoid">
-                                <t t-if="o.comment">
-	                                <table width="100%" style="border:2px solid black;border-radius:8px; border-collapse:separate;">
-	                                    <tr>
-	                                        <td style="text-align:center; padding: 5px;" width="100%">
-	                                            <span t-field="o.comment"/>
-	                                        </td>
-	                                    </tr>
-	                                </table>
-                                </t>
+                                <table width="100%" style="border:2px solid black;border-radius:8px; border-collapse:separate;">
+                                    <tr>
+                                        <td style="text-align:center; padding: 5px;" width="100%">
+                                            <span>Esta factura constituye titulo ejecutivo. El deudor da por
+aceptadas las condiciones del Código de Comercio, Articulo
+No. 460. Después de 30 DÍAS esta factura devenga intereses
+del 4% mensual.</span>
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                             <div class="col-xs-2">
                                 <span style="white-space: pre;">   </span>
