@@ -539,7 +539,7 @@
                         </div>
                         <br/>
                         <div class="row">
-                            <div class="col-xs-12" style="page-break-inside:avoid">
+                            <div class="col-xs-12">
                                 <table width="100%" style="border:1px solid black;">
                                     <thead>
                                         <tr>
@@ -550,7 +550,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr t-foreach="o.print_line_ids" t-as="l">
+                                        <tr t-foreach="o.print_line_ids" t-as="l" style="page-break-inside:avoid;">
 						                    <td class="text-right" style="border-right:1px solid black; padding: 5px;">
 						                        <span t-esc="'{:,.16g}'.format(l.quantity)"/>
 						                    </td>
