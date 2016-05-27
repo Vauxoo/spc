@@ -570,7 +570,7 @@
                                         <t t-if="o.print_line_ids">
                                             <tr t-foreach="o.print_line_ids" t-as="l" style="page-break-inside:avoid;">
                                                 <td class="text-right" style="border-right:1px solid black; padding: 5px;">
-                                                    <span t-field=l.quantity"/>
+                                                    <span t-field="l.quantity"/>
                                                 </td>
                                                 <td style="border-right:1px solid black; padding: 5px;">
                                                     <span t-field="l.name"/>
