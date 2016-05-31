@@ -102,7 +102,7 @@ class AccountInvoiceLine(models.Model):
             'quantity': vals['quantity'],
             'uos_id': vals['uos_id'],
             'name': vals['name'],
-            'discount': vals['discount'],
+            'discount': vals['discount'] if 'discount' in vals.keys() else 0.0,
             'invoice_line_tax_id': tax,
             'price_unit': vals['price_unit'],
             'price_subtotal': res.price_subtotal,
