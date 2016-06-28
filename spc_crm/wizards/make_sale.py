@@ -16,6 +16,6 @@ class MaKeSale(models.TransientModel):
                 [res['res_id']]
             for sale in self.pool.get('sale.order').browse(
                     cr, uid, sale_ids, context=context):
-                origin = sale.origin.split(':')[1]
-                sale.write({'name': sale.name + ' - ' + origin})
+                origin = sale.origin.split(':')[1].strip()
+                sale.write({'name': sale.name + '-' + origin})
         return res
