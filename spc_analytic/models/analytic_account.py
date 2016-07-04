@@ -10,6 +10,6 @@ class AnalyticAccount(models.Model):
     _inherit = 'account.analytic.account'
 
     _sql_constraints = [
-        ('unique_name', 'UNIQUE(name)',
-         'Account/Contract Name must be unique.'),
+        ('unique_name_company', 'UNIQUE(name, company_id)',
+         'Account/Contract Name must be unique per company.'),
     ]
