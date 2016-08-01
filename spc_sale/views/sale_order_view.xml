@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_sale_order_form" model="ir.ui.view">
+            <field name="name">Sale Order View</field>
+            <field name="model">sale.order</field>
+            <field name="priority" eval="16"/>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet/group/group/field[@name='pricelist_id']" position="after">
+                    <field name="date_delivery_equipment" attrs="{'invisible': [('state', '=', 'draft')]}"/>
+                    <field name="date_delivery_service" attrs="{'invisible': [('state', '=', 'draft')]}"/>
+                    <field name="date_invoicing" attrs="{'invisible': [('state', '=', 'draft')]}"/>
+                </xpath>
+                <xpath expr="//form/sheet/notebook/page/field[@name='note']" position="after">
+                    <separator/>
+                    <label for="client_requirement"/>
+                    <field name="client_requirement"/>
+                    <label for="project_scope"/>
+                    <field name="project_scope"/>
+                    <label for="success_factors"/>
+                    <field name="success_factors"/>
+                    <label for="items_out_of_reach"/>
+                    <field name="items_out_of_reach"/>
+                    <label for="observation"/>
+                    <field name="observation"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>
