@@ -8,9 +8,9 @@ class MaKeSale(models.TransientModel):
 
     _inherit = 'crm.make.sale'
 
-
     def makeOrder(self, cr, uid, ids, context=None):
         res = super(MaKeSale, self).makeOrder(cr, uid, ids, context=context)
+        opportunity_ids = context and context.get('active_ids', []) or []
         if res and 'res_id' in res.keys():
             sale_ids = res['res_id'] and isinstance(res['res_id'], list) or \
                 [res['res_id']]
@@ -18,4 +18,6 @@ class MaKeSale(models.TransientModel):
                     cr, uid, sale_ids, context=context):
                 origin = sale.origin.split(':')[1].strip()
                 sale.write({'name': sale.name + '-' + origin})
+                if len(opportunity_ids) >= 1:
+                    sale.write({'ref_oportunity_id': opportunity_ids[0]})
         return res

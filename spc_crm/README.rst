@@ -11,6 +11,7 @@ This module was written to extend the functionality of crm and support for SPC
 * Changes the sequence on sale orders generated from leads
 * Changes the order of leads
 * Allows the user to switch leads between companies
+* Links sale orders and opportunities
 
 Contributors
 ------------

@@ -28,3 +28,5 @@ class Lead(models.Model):
         string='Change Company', compute='_compute_change_company_id',
         inverse='_inverse_change_company_id',
         help='Use this field to change this opportunity between companies.')
+    ref_sale_ids = fields.One2many(
+        'sale.order', 'ref_oportunity_id', string='Sale Orders', readonly=True)
