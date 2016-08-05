@@ -11,6 +11,6 @@ class AccountAnayliticAccount(models.Model):
     _inherit = "account.analytic.account"
 
     # New field in contract
-    wk_production_lot_ids = fields.One2many("stock.production.lot",
-        "wk_contract_id", string="Production Lot",
+    wk_production_lot_ids = fields.One2many(
+        "stock.production.lot", "wk_contract_id", string="Production Lot",
         domain=[('wk_contract_id', '=', 'False')])

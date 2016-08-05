@@ -2,4 +2,6 @@
 # © 2016 ClearCorp
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-import account_analytic_account, sale_order, sale_order_line, stock_production_lot
+from . import account_analytic_account
+from . import sale_order, sale_order_line
+from . import stock_production_lot

@@ -6,7 +6,7 @@
     'name': 'SPC Welcome Kits',
     'summary': 'Custom reports for partner welcome kits',
     'version': '8.0.1.0',
-    'category': '',
+    'category': 'Sales Management',
     'website': 'http://clearcorp.cr',
     'author': 'ClearCorp',
     'license': 'AGPL-3',

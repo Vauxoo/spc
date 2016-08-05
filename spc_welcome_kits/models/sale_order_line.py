@@ -18,4 +18,3 @@ class SaleOrderLine(models.Model):
     wk_under_warranty = fields.Boolean('Print in Welcome Kit')
     wk_begin_date = fields.Date('Begin Date')
     wk_end_date = fields.Date('End Date')
-
