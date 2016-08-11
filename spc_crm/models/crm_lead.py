@@ -14,7 +14,6 @@ SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
 CLIENT_ID = '149905831071-d08bancbk563mj8avccqnfpc12rllimv.apps.googleusercontent.com'
 CLIENT_SECRET = '8KXLgti93Qn990cnspaZ_0Cp'
 REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
-#APPLICATION_NAME = 'Google Sheets API Python Quickstart'
 
 _logger = logging.getLogger(__name__)
 
@@ -65,14 +64,24 @@ class Lead(models.Model):
         res = regex.search(attachment.url)
         # spreadsheetId = '1NoBIVGluLnhX3SMZkeFjReQMKrdItnb6VsN28kXryz8'
         spreadsheetId = res.group(1)
-        rangeName = 'Resultados!C8:D11'
+        rangeName = 'Resultados!C8:D13'
         result = service.spreadsheets().values().get(
             spreadsheetId=spreadsheetId, range=rangeName).execute()
         values = result.get('values', [])
-        print values
         if store_credentials:
             self.set_credentials(credentials)
-        return {}
+        return {
+            'x_planned_cost_product': float(values[0][0]),
+            'x_planned_margin_product': float(values[0][1]),
+            'x_planned_cost_services_eng': float(values[1][0]),
+            'x_planned_margin_services_eng': float(values[1][1]),
+            'x_planned_cost_services_adm': float(values[2][0]),
+            'x_planned_margin_services_adm': float(values[2][1]),
+            'x_unexpected_cost': float(values[3][0]),
+            'x_unexpected_margin': float(values[3][1]),
+            'planned_cost': float(values[5][0]),
+            'x_planned_margin': float(values[5][1]),
+        }
 
     @api.multi
     def sync_business_case(self):
@@ -103,7 +112,7 @@ class Lead(models.Model):
                 ('res_id', '=', lead.id)], limit=1)
             if attachment:
                 data = lead.read_data_from_business_case(attachment)[0]
-                print data
+                lead.write(data)
         return True
 
     def _get_selection_values(self):
