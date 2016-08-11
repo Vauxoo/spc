@@ -68,6 +68,21 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td style="padding-right:10px">Monto imprevistos</td>
+                                    <td style="padding-right:10px">
+                                        <field class="oe_inline"
+                                            widget="monetary"
+                                            options="{'currency_field': 'company_currency'}"
+                                            name="x_unexpected_cost" />
+                                    </td>
+                                    <td>
+                                        <field class="oe_inline"
+                                            widget="monetary"
+                                            options="{'currency_field': 'company_currency'}"
+                                            name="x_unexpected_margin" />
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td style="padding-right:10px">
                                         <b>TOTAL</b>
                                     </td>
