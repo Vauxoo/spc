@@ -111,8 +111,12 @@ class Lead(models.Model):
                 ('name', '=', name_gdocs),
                 ('res_id', '=', lead.id)], limit=1)
             if attachment:
-                data = lead.read_data_from_business_case(attachment)[0]
-                lead.write(data)
+                # Catch exceptions for invalid data
+                try:
+                    data = lead.read_data_from_business_case(attachment)[0]
+                    lead.write(data)
+                except Exception:
+                    _logger.info('Unable to sync for this BC version.')
         return True
 
     def _get_selection_values(self):
