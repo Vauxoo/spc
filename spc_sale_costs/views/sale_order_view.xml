@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- © 2016 ClearCorp
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html). -->
+
+<openerp>
+    <data>
+        <record id="view_sale_order_form" model="ir.ui.view">
+            <field name="name">Sale Order Form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet/notebook" position="inside">
+                    <page name="costs" string="Costs" groups="account.group_account_user">
+                        <group>
+                            <group>
+                                <field name="cost_error"/>
+                                <field name="period_error"/>
+                            </group>
+                            <group>
+                                <field name="profit_percentage"/>
+                            </group>
+                        </group>
+                        <separator string="Cost Pickings"/>
+                        <field name="cost_picking_ids" nolabel="1"/>
+                        <separator string="Income Lines"/>
+                        <field name="income_line_ids" nolabel="1"/>
+                        <separator string="Cost Lines"/>
+                        <field name="cost_line_ids" nolabel="1"/>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+        <record id="view_sale_order_tree" model="ir.ui.view">
+            <field name="name">Sale Order Tree</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree/field[@name='state']" position="after">
+                    <field name="cost_error" groups="account.group_account_user"/>
+                    <field name="period_error" groups="account.group_account_user"/>
+                    <field name="profit_percentage" groups="account.group_account_user"/>
+                </xpath>
+            </field>
+        </record>
+        <record id="view_sale_order_search" model="ir.ui.view">
+            <field name="name">Sale Order Search</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+            <field name="groups_id" eval="[(4, ref('account.group_account_user'))]"/>
+            <field name="arch" type="xml">
+                <xpath expr="//search/field[@name='user_id']" position="after">
+                    <field name="profit_percentage"/>
+                </xpath>
+                <xpath expr="//search/group" position="before">
+                    <separator/>
+                    <filter string="Cost Error" name="cost_error" domain="[('cost_error','=','error')]"/>
+                    <filter string="Period Error" name="period_error" domain="[('period_error','=','error')]"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>

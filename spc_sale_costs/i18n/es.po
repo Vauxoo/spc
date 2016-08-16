@@ -1,0 +1,83 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* spc_sale_costs
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-08-16 20:07+0000\n"
+"PO-Revision-Date: 2016-08-16 20:07+0000\n"
+"Last-Translator: Glen Sojo <glen.sojo@clearcorp.co.cr>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: spc_sale_costs
+#: view:sale.order:spc_sale_costs.view_sale_order_search
+#: field:sale.order,cost_error:0
+msgid "Cost Error"
+msgstr "Error costos"
+
+#. module: spc_sale_costs
+#: view:sale.order:spc_sale_costs.view_sale_order_form
+#: field:sale.order,cost_line_ids:0
+msgid "Cost Lines"
+msgstr "Líneas de costo"
+
+#. module: spc_sale_costs
+#: view:sale.order:spc_sale_costs.view_sale_order_form
+#: field:sale.order,cost_picking_ids:0
+msgid "Cost Pickings"
+msgstr "Albaranes de costo"
+
+#. module: spc_sale_costs
+#: field:stock.picking.type,cost_on_sale_order:0
+msgid "Cost on Sale Orders"
+msgstr "Costo en pedidos de venta"
+
+#. module: spc_sale_costs
+#: view:sale.order:spc_sale_costs.view_sale_order_form
+msgid "Costs"
+msgstr "Costos"
+
+#. module: spc_sale_costs
+#: selection:sale.order,cost_error:0
+#: selection:sale.order,period_error:0
+msgid "Error"
+msgstr "Error"
+
+#. module: spc_sale_costs
+#: view:sale.order:spc_sale_costs.view_sale_order_form
+#: field:sale.order,income_line_ids:0
+msgid "Income Lines"
+msgstr "Líneas de ingreso"
+
+#. module: spc_sale_costs
+#: selection:sale.order,cost_error:0
+#: selection:sale.order,period_error:0
+msgid "Ok"
+msgstr "Ok"
+
+#. module: spc_sale_costs
+#: view:sale.order:spc_sale_costs.view_sale_order_search
+#: field:sale.order,period_error:0
+msgid "Period Error"
+msgstr "Error periodo"
+
+#. module: spc_sale_costs
+#: field:sale.order,profit_percentage:0
+msgid "Profit Percentage"
+msgstr "Porcentaje utilidad"
+
+#. module: spc_sale_costs
+#: model:ir.model,name:spc_sale_costs.model_sale_order
+msgid "Sales Order"
+msgstr "Pedido de venta"
+
+#. module: spc_sale_costs
+#: model:ir.model,name:spc_sale_costs.model_stock_picking_type
+msgid "The picking type determines the picking view"
+msgstr "El tipo de albarán determina la vista de albarán"
