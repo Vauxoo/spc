@@ -11,68 +11,70 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     @api.multi
-    @api.depends('picking_ids.picking_type_id.cost_on_sale_order',
-                 'picking_ids.state')
-    def _compute_cost_picking_ids(self):
-        for order in self:
-            picking_ids = []
-            for picking in order.picking_ids:
-                if picking.picking_type_id.cost_on_sale_order:
-                    picking_ids.append(picking.id)
-            order.cost_picking_ids = self.env['stock.picking'].sudo().search(
-                [('id', 'in', picking_ids)])
-
-    @api.multi
-    @api.depends(
-        'invoice_ids.move_id.line_id.credit', 'cost_picking_ids')
-    def _compute_cost_and_income(self):
+    @api.depends('invoice_ids.move_id.line_id.account_id.income_on_sale_order',
+                 'invoice_ids.move_id.line_id.credit', )
+    def _compute_income_line_ids(self):
         for order in self:
             # Get income lines
             move_ids = []
             for invoice in order.invoice_ids:
                 move_ids.append(invoice.move_id.id)
-            order.income_line_ids = self.env['account.move.line'].search(
-                [('id', 'in', move_ids), ('credit', '>', 0.0)])
+            income_move_lines = self.env[
+                'account.move.line'].search(
+                [('move_id', 'in', move_ids),
+                 ('account_id.income_on_sale_order', '=', True)])
+            # Set income lines
+            order.income_line_ids = income_move_lines
+
+    @api.multi
+    @api.depends('cost_picking_ids', 'cost_line_ids',
+                 'invoice_ids.move_id.line_id.account_id.income_on_sale_order',
+                 'invoice_ids.move_id.line_id.credit',)
+    def _compute_sale_error_states(self):
+        for order in self:
             # Get cost lines
-            move_ids = []
+            pickings_transfered = True
             for picking in order.cost_picking_ids:
-                ids = self.env['account.move'].sudo().search(
-                    [('ref', '=', picking.name)])._ids
-                if ids:
-                    move_ids += list(ids)
-            order.cost_line_ids = self.env['account.move.line'].sudo().search(
-                [('id', 'in', move_ids), ('debit', '>', 0.0)])
+                if picking.state not in ['cancel', 'done']:
+                    pickings_transfered = False
 
-    @api.multi
-    @api.depends('income_line_ids', 'cost_line_ids')
-    def _compute_cost_error(self):
-        for order in self:
-            if order.income_line_ids and order.cost_line_ids:
-                order.cost_error = 'ok'
+            income_move_lines = order.income_line_ids
+            # Get cost error state
+            if not income_move_lines and not order.cost_line_ids:
+                state_cost = 'nd'
+            elif income_move_lines and order.cost_line_ids:
+                state_cost = pickings_transfered and 'ok' or 'error'
+            elif not income_move_lines and order.cost_line_ids:
+                state_cost = 'error'
+            elif income_move_lines and not order.cost_line_ids:
+                state_cost = order.cost_picking_ids and 'error' or 'ok'
             else:
-                order.cost_error = 'error'
+                state_cost = 'error'
 
-    @api.multi
-    @api.depends('income_line_ids.credit', 'cost_line_ids.debit')
-    def _compute_period_error(self):
-        for order in self:
+            # Get period error state
             if not order.cost_line_ids:
-                order.period_error = 'ok'
+                period_state = 'ok'
             else:
-                state = 'ok'
+                period_state = 'ok'
                 # Get the oldest income line
                 income_line = self.env['account.move.line'].search(
-                    [('id', 'in', order.income_line_ids._ids)],
+                    [('id', 'in', income_move_lines._ids)],
                     order='date asc', limit=1)
                 if income_line:
                     for line in order.cost_line_ids:
                         if line.period_id.id != income_line.period_id.id:
-                            state = 'error'
+                            period_state = 'error'
                             break
-                order.period_error = state
+
+            # Set cost error state
+            order.cost_error = state_cost
+            # Set period error state
+            order.period_error = period_state
 
     @api.multi
-    @api.depends('income_line_ids.credit', 'cost_line_ids.debit')
+    @api.depends('cost_picking_ids', 'cost_line_ids',
+                 'invoice_ids.move_id.line_id.account_id.income_on_sale_order',
+                 'invoice_ids.move_id.line_id.credit', )
     def _compute_profit_percentage(self):
         for order in self:
             total_credit = 0.0
@@ -82,26 +84,24 @@ class SaleOrder(models.Model):
             for line in order.cost_line_ids:
                 total_debit += line.debit
             try:
-                order.profit_percentage = (
-                    total_credit - total_debit) / total_credit
+                order.profit_percentage = ((
+                    total_credit - total_debit) / total_credit) * 100
             except ZeroDivisionError:
                 order.profit_percentage = 0.0
 
     cost_picking_ids = fields.One2many(
-        'stock.picking', string='Cost Pickings',
-        compute='_compute_cost_picking_ids')
+        'stock.picking', 'cost_sale_order_id', string='Cost Pickings')
     income_line_ids = fields.One2many(
         'account.move.line', string='Income Lines',
-        compute='_compute_cost_and_income')
+        compute='_compute_income_line_ids')
     cost_line_ids = fields.One2many(
-        'account.move.line', string='Cost Lines',
-        compute='_compute_cost_and_income')
+        'account.move.line', 'cost_sale_order_id', string='Cost Lines')
     cost_error = fields.Selection(
-        [('ok', 'Ok'), ('error', 'Error')], string='Cost Error',
-        compute='_compute_cost_error', default='ok', store=True)
+        [('nd', 'N/D'), ('ok', 'OK'), ('error', 'Error')], string='Cost Error',
+        compute='_compute_sale_error_states', store=True)
     period_error = fields.Selection(
-        [('ok', 'Ok'), ('error', 'Error')], string='Period Error',
-        compute='_compute_period_error', default='ok', store=True)
+        [('ok', 'OK'), ('error', 'Error')], string='Period Error',
+        compute='_compute_sale_error_states', store=True)
     profit_percentage = fields.Float(
         'Profit Percentage', digits=dp.get_precision('Account'),
-        compute='_compute_profit_percentage', default=0.0, store=True)
+        compute='_compute_profit_percentage', store=True)
