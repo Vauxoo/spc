@@ -16,9 +16,11 @@
     'auto_install': False,
     'depends': [
         'sale_stock',
+        'stock_account_move_line',
     ],
     'data': [
         'views/picking_type_view.xml',
+        'views/account_view.xml',
         'views/sale_order_view.xml',
     ],
 }

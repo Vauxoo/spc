@@ -1,0 +1,13 @@
+# -*- coding: utf-8 -*-
+# © 2016 ClearCorp
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+
+from openerp import models, fields
+
+
+class Account(models.Model):
+
+    _inherit = 'account.account'
+
+    income_on_sale_order = fields.Boolean('Income on Sale Orders')
+    cost_on_sale_order = fields.Boolean('Cost on Sale Orders')
