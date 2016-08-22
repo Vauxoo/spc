@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <openerp>
-    <data noupdate="1">
+    <data>
 
         <record id="welcome_kits_report_id" model="ir.actions.report.xml">
             <field name="name">Contract Welcome Kit</field>
