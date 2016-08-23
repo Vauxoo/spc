@@ -37,9 +37,24 @@ msgid "Contract"
 msgstr "Contrato"
 
 #. module: spc_welcome_kits
+#: view:sale.order:spc_welcome_kits.view_sale_order_line_form
+msgid "Contract Lines"
+msgstr "Líneas de contrato"
+
+#. module: spc_welcome_kits
 #: model:ir.actions.report.xml,name:spc_welcome_kits.welcome_kits_report_id
 msgid "Contract Welcome Kit"
 msgstr "Contract Welcome Kit"
+
+#. module: spc_welcome_kits
+#: field:sale.order.contract.line,create_uid:0
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: spc_welcome_kits
+#: field:sale.order.contract.line,create_date:0
+msgid "Created on"
+msgstr "Creado en"
 
 #. module: spc_welcome_kits
 #: field:sale.order.line,wk_end_date:0
@@ -52,14 +67,24 @@ msgid "Equipment Serial Number"
 msgstr "Número de serie"
 
 #. module: spc_welcome_kits
+#: field:sale.order.contract.line,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: spc_welcome_kits
+#: field:sale.order.contract.line,write_uid:0
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: spc_welcome_kits
+#: field:sale.order.contract.line,write_date:0
+msgid "Last Updated on"
+msgstr "Última actualización en"
+
+#. module: spc_welcome_kits
 #: model:ir.model,name:spc_welcome_kits.model_stock_production_lot
 msgid "Lot/Serial"
 msgstr "Lote/Nº de serie"
-
-#. module: spc_welcome_kits
-#: field:sale.order.line,wk_under_warranty:0
-msgid "Print in Welcome Kit"
-msgstr "Imprimir en el Welcome Kit"
 
 #. module: spc_welcome_kits
 #: field:sale.order.line,wk_product_number:0
@@ -69,12 +94,17 @@ msgstr "Número de producto"
 #. module: spc_welcome_kits
 #: field:account.analytic.account,wk_production_lot_ids:0
 msgid "Production Lot"
-msgstr "Production Lot"
+msgstr "Lote de producción"
 
 #. module: spc_welcome_kits
 #: view:account.analytic.account:spc_welcome_kits.view_account_analytic_account_form
 msgid "Production Lots"
-msgstr "Lote de producción Lots"
+msgstr "Lotes de producción"
+
+#. module: spc_welcome_kits
+#: field:sale.order.contract.line,order_id:0
+msgid "Sale Order"
+msgstr "Pedido de venta"
 
 #. module: spc_welcome_kits
 #: model:ir.model,name:spc_welcome_kits.model_sale_order
@@ -100,4 +130,9 @@ msgstr "Hipervínculo del nivel de servicio"
 #: field:sale.order.line,wk_site_name:0
 msgid "Site Name"
 msgstr "Nombre del sitio"
+
+#. module: spc_welcome_kits
+#: field:sale.order,contract_line_ids:0
+msgid "Welcome-Kit Lines"
+msgstr "Líneas del Welcome Kit"
 
