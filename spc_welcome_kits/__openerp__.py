@@ -23,6 +23,7 @@
         'views/sale_order_view.xml',
         'views/sale_order_line_view.xml',
         'views/account_analytic_account_view.xml',
-        'views/stock_production_lot_view.xml'
+        'views/stock_production_lot_view.xml',
+        'security/ir.model.access.csv'
     ]
 }
