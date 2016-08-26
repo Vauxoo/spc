@@ -10,7 +10,7 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//form/sheet/notebook" position="inside">
-                    <page name="costs" string="Costs" groups="account.group_account_user">
+                    <page name="costs" string="Costs">
                         <group>
                             <group>
                                 <field name="cost_error"/>
@@ -36,9 +36,9 @@
             <field name="inherit_id" ref="sale.view_order_tree"/>
             <field name="arch" type="xml">
                 <xpath expr="//tree/field[@name='state']" position="after">
-                    <field name="cost_error" groups="account.group_account_user"/>
-                    <field name="period_error" groups="account.group_account_user"/>
-                    <field name="profit_percentage" groups="account.group_account_user"/>
+                    <field name="cost_error"/>
+                    <field name="period_error"/>
+                    <field name="profit_percentage"/>
                 </xpath>
             </field>
         </record>
@@ -46,7 +46,6 @@
             <field name="name">Sale Order Search</field>
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_sales_order_filter"/>
-            <field name="groups_id" eval="[(4, ref('account.group_account_user'))]"/>
             <field name="arch" type="xml">
                 <xpath expr="//search/field[@name='user_id']" position="after">
                     <field name="profit_percentage"/>
