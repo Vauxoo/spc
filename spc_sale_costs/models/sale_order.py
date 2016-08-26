@@ -11,7 +11,8 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     @api.multi
-    @api.depends('invoice_ids', 'invoice_ids.move_id',
+    @api.depends(
+        'invoice_ids', 'invoice_ids.move_id',
         'invoice_ids.move_id.line_id.account_id.income_on_sale_order')
     def _compute_income_line_ids(self):
         for order in self:
@@ -27,9 +28,11 @@ class SaleOrder(models.Model):
             order.income_line_ids = income_move_lines
 
     @api.multi
-    @api.depends('cost_picking_ids', 'cost_picking_ids.state',
-        'income_line_ids', 'cost_line_ids',
-        'income_line_ids.period_id', 'income_line_ids.date',
+    @api.depends(
+        'cost_picking_ids', 'cost_picking_ids.state', 'invoice_ids',
+        'invoice_ids.move_id', 'cost_line_ids',
+        'invoice_ids.move_id.line_id.account_id.income_on_sale_order',
+        'invoice_ids.move_id.period_id', 'invoice_ids.move_id.date',
         'cost_line_ids.period_id', 'cost_line_ids.date')
     def _compute_sale_error_states(self):
         for order in self:
@@ -73,7 +76,9 @@ class SaleOrder(models.Model):
             order.period_error = period_state
 
     @api.multi
-    @api.depends('cost_line_ids', 'invoice_line_ids')
+    @api.depends(
+        'cost_line_ids', 'invoice_ids', 'invoice_ids.move_id',
+        'invoice_ids.move_id.line_id.account_id.income_on_sale_order')
     def _compute_profit_percentage(self):
         for order in self:
             total_credit = 0.0
