@@ -10,8 +10,8 @@ class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
     @api.multi
-    @api.depends('picking_type_id', 'picking_type_id.cost_on_sale_order',
-                 'group_id')
+    @api.depends('picking_type_id',
+        'picking_type_id.cost_on_sale_order', 'group_id')
     def _compute_cost_sale_order_id(self):
         for picking in self:
             if picking.picking_type_id.cost_on_sale_order:
