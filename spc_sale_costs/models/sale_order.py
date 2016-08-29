@@ -11,6 +11,29 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     @api.multi
+    def action_reassign_sale_costs(self):
+        for order in self:
+            # Get the oldest income
+            income_line = self.env['account.move.line'].search(
+                [('id', 'in', order.income_line_ids._ids)], order='date asc',
+                limit=1)
+            if income_line:
+                for line in order.cost_line_ids:
+                    if line.period_id.id != income_line.period_id.id:
+                        if line.move_id.state == 'posted':
+                            line.move_id.button_cancel()
+                            line.write({
+                                'period_id': income_line.period_id.id,
+                                'date': income_line.date,
+                            })
+                            line.move_id.button_validate()
+                        else:
+                            line.write({
+                                'period_id': income_line.period_id.id,
+                                'date': income_line.date,
+                            })
+
+    @api.multi
     @api.depends(
         'invoice_ids', 'invoice_ids.move_id',
         'invoice_ids.move_id.line_id.account_id.income_on_sale_order')
