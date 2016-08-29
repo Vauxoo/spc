@@ -19,6 +19,7 @@
         'stock_account_move_line',
     ],
     'data': [
+        'security/spc_sale_costs_security.xml',
         'views/picking_type_view.xml',
         'views/account_view.xml',
         'views/sale_order_view.xml',

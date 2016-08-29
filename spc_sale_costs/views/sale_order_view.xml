@@ -9,6 +9,9 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
+                <xpath expr="//form/header/button[@name='action_cancel']" position="after">
+                    <button name="action_reassign_sale_costs" string="Reassign Sale Costs" type="object" groups="spc_sale_costs.group_reassign_costs"/>
+                </xpath>
                 <xpath expr="//form/sheet/notebook" position="inside">
                     <page name="costs" string="Costs">
                         <group>
