@@ -27,7 +27,7 @@ class ProjectIssue(models.Model):
                  [('res_model', '=', self._name),
                   ('res_id', '=', issue.id)])
 
-    attachment_ids = fields.One2many(comodel_name='ir.attachment',
+    attachment_ids = fields.One2many('ir.attachment',
                                      string='Related Attachments',
                                      compute='_compute_related_attachments',
                                      search='_search_related_attachments')
