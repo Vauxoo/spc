@@ -112,7 +112,7 @@ class Lead(models.Model):
             spreadsheetId=spreadsheet_id, range=range_name).execute()
         values = result.get('values', [])
         res.update({
-            'planned_revenue': float(values[0][0]),
+            'x_planned_contribution_margin': float(values[0][0]),
             'detail_incidentals': float(values[0][2]),
             'detail_total_revenue': float(values[0][4]),
         })
