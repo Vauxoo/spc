@@ -12,19 +12,6 @@
                     <field name="date_delivery_service" attrs="{'invisible': [('state', '=', 'draft')]}"/>
                     <field name="date_invoicing" attrs="{'invisible': [('state', '=', 'draft')]}"/>
                 </xpath>
-                <xpath expr="//form/sheet/notebook/page/field[@name='note']" position="after">
-                    <separator/>
-                    <label for="client_requirement"/>
-                    <field name="client_requirement"/>
-                    <label for="project_scope"/>
-                    <field name="project_scope"/>
-                    <label for="success_factors"/>
-                    <field name="success_factors"/>
-                    <label for="items_out_of_reach"/>
-                    <field name="items_out_of_reach"/>
-                    <label for="observation"/>
-                    <field name="observation"/>
-                </xpath>
             </field>
         </record>
     </data>
