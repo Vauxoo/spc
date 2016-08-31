@@ -12,8 +12,3 @@ class SaleOrder(models.Model):
     date_delivery_equipment = fields.Date('Equipment Delivery Date')
     date_delivery_service = fields.Date('Service Delivery Date')
     date_invoicing = fields.Date('Estimated Invoicing Date')
-    client_requirement = fields.Text('Client Requirement')
-    project_scope = fields.Text('Project Scope')
-    success_factors = fields.Text('Critical Factors of Success')
-    items_out_of_reach = fields.Text('Items Out of Reach')
-    observation = fields.Text('Observations')

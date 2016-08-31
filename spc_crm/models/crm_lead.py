@@ -9,6 +9,7 @@ from apiclient import discovery
 from oauth2client.client import Credentials
 from openerp import models, fields, api, _
 from openerp.exceptions import Warning
+import openerp.addons.decimal_precision as dp
 
 SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
 CLIENT_ID = '149905831071-d08bancbk563mj8avccqnfpc12rllimv.apps.googleusercontent.com'
@@ -16,6 +17,7 @@ CLIENT_SECRET = '8KXLgti93Qn990cnspaZ_0Cp'
 REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
 
 _logger = logging.getLogger(__name__)
+
 
 class Lead(models.Model):
 
@@ -33,7 +35,7 @@ class Lead(models.Model):
             credentials = None
         if not credentials or credentials.invalid:
             raise Warning(_(
-                'Google Drive is not yet configured. Please contact'
+                'Google Drive is not yet configured. Please contact '
                 'your administrator.'))
         return credentials
 
@@ -62,26 +64,59 @@ class Lead(models.Model):
 
         regex = re.compile('\/d\/(.*)\/')
         res = regex.search(attachment.url)
-        # spreadsheetId = '1NoBIVGluLnhX3SMZkeFjReQMKrdItnb6VsN28kXryz8'
-        spreadsheetId = res.group(1)
-        rangeName = 'Resultados!C8:D13'
+        spreadsheet_id = res.group(1)
+        range_name = 'Resultados!C17:G22'
+
+        #Read Details
         result = service.spreadsheets().values().get(
-            spreadsheetId=spreadsheetId, range=rangeName).execute()
+            spreadsheetId=spreadsheet_id, range=range_name).execute()
         values = result.get('values', [])
         if store_credentials:
             self.set_credentials(credentials)
-        return {
-            'x_planned_cost_product': float(values[0][0]),
-            'x_planned_margin_product': float(values[0][1]),
-            'x_planned_cost_services_eng': float(values[1][0]),
-            'x_planned_margin_services_eng': float(values[1][1]),
-            'x_planned_cost_services_adm': float(values[2][0]),
-            'x_planned_margin_services_adm': float(values[2][1]),
-            'x_unexpected_cost': float(values[3][0]),
-            'x_unexpected_margin': float(values[3][1]),
-            'planned_cost': float(values[5][0]),
-            'x_planned_margin': float(values[5][1]),
+        res = {
+            'detail_product_cost': float(values[0][0]),
+            'detail_product_price': float(values[0][1]),
+            'detail_product_price_vat': float(values[0][2]),
+            'detail_product_profit': float(values[0][3]),
+            'detail_product_markup': float(values[0][4]),
+            'detail_warranty_cost': float(values[1][0]),
+            'detail_warranty_price': float(values[1][1]),
+            'detail_warranty_price_vat': float(values[1][2]),
+            'detail_warranty_profit': float(values[1][3]),
+            'detail_warranty_markup': float(values[1][4]),
+            'detail_service_cost': float(values[2][0]),
+            'detail_service_price': float(values[2][1]),
+            'detail_service_price_vat': float(values[2][2]),
+            'detail_service_profit': float(values[2][3]),
+            'detail_service_markup': float(values[2][4]),
+            'detail_material_cost': float(values[3][0]),
+            'detail_material_price': float(values[3][1]),
+            'detail_material_price_vat': float(values[3][2]),
+            'detail_material_profit': float(values[3][3]),
+            'detail_material_markup': float(values[3][4]),
+            'detail_service_expense_cost': float(values[4][0]),
+            'detail_service_expense_price': float(values[4][1]),
+            'detail_service_expense_price_vat': float(values[4][2]),
+            'detail_service_expense_profit': float(values[4][3]),
+            'detail_service_expense_markup': float(values[4][4]),
+            'detail_total_cost': float(values[5][0]),
+            'detail_total_price': float(values[5][1]),
+            'detail_total_price_vat': float(values[5][2]),
+            'detail_total_profit': float(values[5][3]),
+            'detail_total_markup': float(values[5][4]),
         }
+
+        # Read Margins
+        range_name = 'Resultados!C14:G14'
+        result = service.spreadsheets().values().get(
+            spreadsheetId=spreadsheet_id, range=range_name).execute()
+        values = result.get('values', [])
+        res.update({
+            'planned_revenue': float(values[0][0]),
+            'detail_incidentals': float(values[0][2]),
+            'detail_total_revenue': float(values[0][4]),
+        })
+        return res
 
     @api.multi
     def sync_business_case(self):
@@ -139,3 +174,72 @@ class Lead(models.Model):
         help='Use this field to change this opportunity between companies.')
     ref_sale_ids = fields.One2many(
         'sale.order', 'ref_oportunity_id', string='Sale Orders', readonly=True)
+    client_requirement = fields.Text('Client Requirement')
+    project_scope = fields.Text('Project Scope')
+    success_factors = fields.Text('Critical Factors of Success')
+    items_out_of_reach = fields.Text('Items Out of Reach')
+    observation = fields.Text('Observations')
+    detail_incidentals = fields.Float(
+        'Incidentals', digits=dp.get_precision('Account'))
+    detail_total_revenue = fields.Float(
+        'Total Revenue', digits=dp.get_precision('Account'))
+    detail_product_cost = fields.Float(
+        'Product Cost', digits=dp.get_precision('Account'))
+    detail_product_price = fields.Float(
+        'Product Price', digits=dp.get_precision('Account'))
+    detail_product_price_vat = fields.Float(
+        'Product Price + VAT', digits=dp.get_precision('Account'))
+    detail_product_profit = fields.Float(
+        'Product Profit', digits=dp.get_precision('Account'))
+    detail_product_markup = fields.Float(
+        'Product Markup', digits=dp.get_precision('Account'))
+    detail_warranty_cost = fields.Float(
+        'Warranty Cost', digits=dp.get_precision('Account'))
+    detail_warranty_price = fields.Float(
+        'Warranty Price', digits=dp.get_precision('Account'))
+    detail_warranty_price_vat = fields.Float(
+        'Warranty Price + VAT', digits=dp.get_precision('Account'))
+    detail_warranty_profit = fields.Float(
+        'Warranty Profit', digits=dp.get_precision('Account'))
+    detail_warranty_markup = fields.Float(
+        'Warranty Markup', digits=dp.get_precision('Account'))
+    detail_service_cost = fields.Float(
+        'Service Cost', digits=dp.get_precision('Account'))
+    detail_service_price = fields.Float(
+        'Service Price', digits=dp.get_precision('Account'))
+    detail_service_price_vat = fields.Float(
+        'Service Price + VAT', digits=dp.get_precision('Account'))
+    detail_service_profit = fields.Float(
+        'Service Profit', digits=dp.get_precision('Account'))
+    detail_service_markup = fields.Float(
+        'Service Markup', digits=dp.get_precision('Account'))
+    detail_material_cost = fields.Float(
+        'Material Cost', digits=dp.get_precision('Account'))
+    detail_material_price = fields.Float(
+        'Material Price', digits=dp.get_precision('Account'))
+    detail_material_price_vat = fields.Float(
+        'Material Price + VAT', digits=dp.get_precision('Account'))
+    detail_material_profit = fields.Float(
+        'Material Profit', digits=dp.get_precision('Account'))
+    detail_material_markup = fields.Float(
+        'Material Markup', digits=dp.get_precision('Account'))
+    detail_service_expense_cost = fields.Float(
+        'Service Expense Cost', digits=dp.get_precision('Account'))
+    detail_service_expense_price = fields.Float(
+        'Service Expense Price', digits=dp.get_precision('Account'))
+    detail_service_expense_price_vat = fields.Float(
+        'Service Expense Price + VAT', digits=dp.get_precision('Account'))
+    detail_service_expense_profit = fields.Float(
+        'Service Expense Profit', digits=dp.get_precision('Account'))
+    detail_service_expense_markup = fields.Float(
+        'Service Expense Markup', digits=dp.get_precision('Account'))
+    detail_total_cost = fields.Float(
+        'Total Cost', digits=dp.get_precision('Account'))
+    detail_total_price = fields.Float(
+        'Total Price', digits=dp.get_precision('Account'))
+    detail_total_price_vat = fields.Float(
+        'Total Price + VAT', digits=dp.get_precision('Account'))
+    detail_total_profit = fields.Float(
+        'Total Profit', digits=dp.get_precision('Account'))
+    detail_total_markup = fields.Float(
+        'Total Markup', digits=dp.get_precision('Account'))
