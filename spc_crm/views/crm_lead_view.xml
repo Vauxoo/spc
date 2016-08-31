@@ -9,7 +9,7 @@
             <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
             <field name="priority" eval="110"/>
             <field name="arch" type="xml">
-                <xpath expr="//form/sheet/div/h2/field[@name='planned_revenue']" position="after">
+                <xpath expr="//form/sheet/div/h2/field[@name='x_planned_contribution_margin']" position="after">
                     <span> - </span>
                     <field name="detail_incidentals" class="oe_inline" widget="monetary" options="{'currency_field': 'company_currency'}" nolabel="1"/>
                     <span> = </span>
