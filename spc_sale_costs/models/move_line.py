@@ -30,9 +30,9 @@ class AccountMoveLine(models.Model):
                     [('product_id','=',line.product_id.id),
                      ('product_uom_qty','=',line.quantity),
                      ('picking_id.name','=',line.ref),
-                     ('company_id','=',line.company_id.id)])
+                     ('company_id','=',line.company_id.id)], limit = 1)
                 if stock_move_ids:
-                    picking = stock_move_obj.browse(stock_move_ids[0]).picking_id
+                    picking = stock_move_ids.picking_id
                     line.cost_sale_order_id = picking.cost_sale_order_id
                 else:
                     line.cost_sale_order_id = False
