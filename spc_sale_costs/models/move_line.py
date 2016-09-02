@@ -27,10 +27,10 @@ class AccountMoveLine(models.Model):
                     line.account_id.cost_on_sale_order:
                 stock_move_obj = self.env['stock.move']
                 stock_move_ids = stock_move_obj.search(
-                    [('product_id','=',line.product_id),
+                    [('product_id','=',line.product_id.id),
                      ('product_uom_qty','=',line.quantity),
                      ('picking_id.name','=',line.ref),
-                     ('company_id','=',line.company_id)])
+                     ('company_id','=',line.company_id.id)])
                 if stock_move_ids:
                     picking = stock_move_obj.browse(stock_move_ids[0]).picking_id
                     line.cost_sale_order_id = picking.cost_sale_order_id
