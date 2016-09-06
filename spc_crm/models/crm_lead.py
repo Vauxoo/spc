@@ -69,7 +69,8 @@ class Lead(models.Model):
 
         #Read Details
         result = service.spreadsheets().values().get(
-            spreadsheetId=spreadsheet_id, range=range_name).execute()
+            spreadsheetId=spreadsheet_id, range=range_name,
+            valueRenderOption='UNFORMATTED_VALUE').execute()
         values = result.get('values', [])
         if store_credentials:
             self.set_credentials(credentials)
@@ -109,7 +110,8 @@ class Lead(models.Model):
         # Read Margins
         range_name = 'Resultados!C14:G14'
         result = service.spreadsheets().values().get(
-            spreadsheetId=spreadsheet_id, range=range_name).execute()
+            spreadsheetId=spreadsheet_id, range=range_name,
+            valueRenderOption='UNFORMATTED_VALUE').execute()
         values = result.get('values', [])
         res.update({
             'x_planned_contribution_margin': float(values[0][0]),
@@ -152,6 +154,17 @@ class Lead(models.Model):
                     lead.write(data)
                 except Exception:
                     _logger.info('Unable to sync for this BC version.')
+        return True
+
+    def sync_business_case_all(self, cr, uid, stage_ids=[], context=None):
+        """Sync all bussiness_case in the states specified"""
+        lead_ids = self.search(
+            cr, uid, [('stage_id', 'in', stage_ids)], context=context)
+        for lead in self.browse(cr, uid, lead_ids, context=context):
+            try:
+                lead.sync_business_case()
+            except:
+                _logger.error('Error processing lead %s.' % lead.id)
         return True
 
     def _get_selection_values(self):
