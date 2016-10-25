@@ -11,16 +11,32 @@ class StockMove(models.Model):
 
     @api.model
     def create(self, vals):
-        res = super(StockMove, self).create(vals)
+        #Test if user is in MIA company (9) and if user is part of the
+        #import group (71). If it is, a sudo is necesary as it will go
+        #change records on other companies
+        if vals['company_id'] != self.env.user.company_id.id and \
+            71 in self.env.user.groups_id._ids and \
+            self.env.user.company_id.id == 9:
+            res = super(StockMove, self).sudo().create(vals)
+        else:
+            res = super(StockMove, self).create(vals)
         if 'group_id' in vals and 'picking_id' in vals:
             picking = self.env['stock.picking'].search(
                 [('id', '=', vals['picking_id'])])
-            picking.get_cost_sale_order()
+            picking.sudo().get_cost_sale_order()
         return res
 
     @api.multi
     def write(self, vals):
-        res = super(StockMove, self).write(vals)
+        #Test if user is in MIA company (9) and if user is part of the
+        #import group (71). If it is, a sudo is necesary as it will go
+        #change records on other companies
+        if self.company_id.id != self.env.user.company_id.id and \
+            71 in self.env.user.groups_id._ids and \
+            self.env.user.company_id.id == 9:
+            res = super(StockMove, self).sudo().write(vals)
+        else:
+            res = super(StockMove, self).write(vals)
         if 'group_id' in vals or 'picking_id' in vals:
             picking_obj = self.env['stock.picking']
             for move in self:
@@ -28,5 +44,5 @@ class StockMove(models.Model):
                     vals['picking_id'] or move.picking_id.id
                 picking = picking_obj.search(
                     [('id', '=', picking_id)])
-                picking.get_cost_sale_order()
+                picking.sudo().get_cost_sale_order()
         return res
