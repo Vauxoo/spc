@@ -31,7 +31,8 @@ class StockMove(models.Model):
         #Test if user is in MIA company (9) and if user is part of the
         #import group (71). If it is, a sudo is necesary as it will go
         #change records on other companies
-        if self.company_id.id != self.env.user.company_id.id and \
+        if self.env.user.company_id.id not in \
+            self.mapped('company_id.id') and \
             71 in self.env.user.groups_id._ids and \
             self.env.user.company_id.id == 9:
             res = super(StockMove, self).sudo().write(vals)
