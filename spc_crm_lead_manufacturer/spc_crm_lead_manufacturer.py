@@ -40,19 +40,6 @@ class CRMLead(models.Model):
         'spc.crm.lead.manufacturer.line', 'lead_id', string='Manufacturer')
 
     @api.one
-    @api.constrains('manufacturer_line_ids')
-    def _check_manufacturer_line_ids(self):
-        estimate_total = 0
-        total = 0
-        for line in self.manufacturer_line_ids:
-            estimate_total += line.estimate
-            total += line.total
-        if self.manufacturer_line_ids:
-            if math.fabs(100.0 - estimate_total) != 0.0:
-                raise ValidationError(
-                    _('Estimate total must be equal to 100%'))
-
-    @api.one
     @api.constrains('projection')
     def _check_projection(self):
         model_data_obj = self.pool.get('ir.model.data')
@@ -68,19 +55,10 @@ class CRMLead(models.Model):
 class CRMManufacturerLine(models.Model):
     _name = 'spc.crm.lead.manufacturer.line'
 
-    @api.multi
-    @api.depends('lead_id.x_planned_cost_product', 'estimate')
-    def _compute_total(self):
-        for line in self:
-            line.total = line.lead_id.x_planned_cost_product * \
-                line.estimate/100
-        return True
-
     lead_id = fields.Many2one('crm.lead', string='Lead')
     product_brand_id = fields.Many2one('product.brand', string='Manufacturer')
     code = fields.Char('Code')
     estimate = fields.Float(string='Estimate %')
-    total = fields.Float(string="Total", compute='_compute_total')
 
 
 class ProductBrand(models.Model):
