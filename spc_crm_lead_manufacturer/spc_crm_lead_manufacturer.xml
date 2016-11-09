@@ -14,7 +14,6 @@
                             <field name="product_brand_id" required="True" />
                             <field name="code" required="True"/>
                             <field name="estimate" sum="Estimate Total" required="True"/>
-                            <field name="total" sum="Total" required="True"/>
                         </tree>
                     </field>
                 </xpath>
