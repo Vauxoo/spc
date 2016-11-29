@@ -15,11 +15,13 @@
                 <xpath expr="//form/sheet/notebook" position="inside">
                     <page name="costs" string="Costs">
                         <group>
-                            <group>
+                            <group col="3">
                                 <field name="cost_error"/>
+                                <button name="action_toggle_cost_manual_fix" type="object" string="Manual" groups="spc_sale_costs.group_manual_fix" />
                                 <field name="period_error"/>
+                                <button name="action_toggle_period_manual_fix" type="object" string="Manual" groups="spc_sale_costs.group_manual_fix" />
                             </group>
-                            <group>
+                            <group col="3">
                                 <field name="profit_percentage"/>
                             </group>
                         </group>

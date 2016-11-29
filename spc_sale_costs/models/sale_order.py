@@ -4,6 +4,7 @@
 
 from openerp import models, fields, api
 import openerp.addons.decimal_precision as dp
+from datetime import datetime
 
 
 class SaleOrder(models.Model):
@@ -56,42 +57,49 @@ class SaleOrder(models.Model):
         'invoice_ids.move_id', 'cost_line_ids',
         'invoice_ids.move_id.line_id.account_id.income_on_sale_order',
         'invoice_ids.move_id.period_id', 'invoice_ids.move_id.date',
-        'cost_line_ids.period_id', 'cost_line_ids.date')
+        'cost_line_ids.period_id', 'cost_line_ids.date',
+        'cost_error_manual_time', 'period_error_manual_time')
     def _compute_sale_error_states(self):
         for order in self:
-            # Get cost lines
-            pickings_transfered = True
-            for picking in order.cost_picking_ids:
-                if picking.state not in ['cancel', 'done']:
-                    pickings_transfered = False
-
-            income_move_lines = order.income_line_ids
-            # Get cost error state
-            if not income_move_lines and not order.cost_line_ids:
-                state_cost = 'nd'
-            elif income_move_lines and order.cost_line_ids:
-                state_cost = pickings_transfered and 'ok' or 'error'
-            elif not income_move_lines and order.cost_line_ids:
-                state_cost = 'error'
-            elif income_move_lines and not order.cost_line_ids:
-                state_cost = order.cost_picking_ids and 'error' or 'ok'
+            if order.cost_error_manual_time:
+                state_cost = 'manual'
             else:
-                state_cost = 'error'
+                # Get cost lines
+                pickings_transfered = True
+                for picking in order.cost_picking_ids:
+                    if picking.state not in ['cancel', 'done']:
+                        pickings_transfered = False
 
-            # Get period error state
-            if not order.cost_line_ids:
-                period_state = 'ok'
+                income_move_lines = order.income_line_ids
+                # Get cost error state
+                if not income_move_lines and not order.cost_line_ids:
+                    state_cost = 'nd'
+                elif income_move_lines and order.cost_line_ids:
+                    state_cost = pickings_transfered and 'ok' or 'error'
+                elif not income_move_lines and order.cost_line_ids:
+                    state_cost = 'error'
+                elif income_move_lines and not order.cost_line_ids:
+                    state_cost = order.cost_picking_ids and 'error' or 'ok'
+                else:
+                    state_cost = 'error'
+
+            if order.period_error_manual_time:
+                period_state = 'manual'
             else:
-                period_state = 'ok'
-                # Get the oldest income line
-                income_line = self.env['account.move.line'].search(
-                    [('id', 'in', income_move_lines._ids)],
-                    order='date asc', limit=1)
-                if income_line:
-                    for line in order.cost_line_ids:
-                        if line.period_id.id != income_line.period_id.id:
-                            period_state = 'error'
-                            break
+                # Get period error state
+                if not order.cost_line_ids:
+                    period_state = 'ok'
+                else:
+                    period_state = 'ok'
+                    # Get the oldest income line
+                    income_line = self.env['account.move.line'].search(
+                        [('id', 'in', income_move_lines._ids)],
+                        order='date asc', limit=1)
+                    if income_line:
+                        for line in order.cost_line_ids:
+                            if line.period_id.id != income_line.period_id.id:
+                                period_state = 'error'
+                                break
 
             # Set cost error state
             order.cost_error = state_cost
@@ -116,6 +124,22 @@ class SaleOrder(models.Model):
             except ZeroDivisionError:
                 order.profit_percentage = 0.0
 
+    @api.multi
+    def action_toggle_cost_manual_fix(self):
+        for order in self:
+            if order.cost_error_manual_time:
+                order.cost_error_manual_time = False
+            else:
+                order.cost_error_manual_time = fields.Datetime.now()
+
+    @api.multi
+    def action_toggle_period_manual_fix(self):
+        for order in self:
+            if order.period_error_manual_time:
+                order.period_error_manual_time = False
+            else:
+                order.period_error_manual_time = fields.Datetime.now()
+
     cost_picking_ids = fields.One2many(
         'stock.picking', 'cost_sale_order_id', string='Cost Pickings')
     income_line_ids = fields.One2many(
@@ -124,12 +148,16 @@ class SaleOrder(models.Model):
     cost_line_ids = fields.One2many(
         'account.move.line', 'cost_sale_order_id', string='Cost Lines')
     cost_error = fields.Selection(
-        [('nd', 'N/D'), ('ok', 'OK'), ('error', 'Error')],
+        [('nd', 'N/D'), ('ok', 'OK'), ('error', 'Error'), ('manual', 'Manual')],
         string='Cost Error', compute='_compute_sale_error_states',
         store=True)
     period_error = fields.Selection(
-        [('ok', 'OK'), ('error', 'Error')], string='Period Error',
-        compute='_compute_sale_error_states', store=True)
+        [('ok', 'OK'), ('error', 'Error'), ('manual', 'Manual')],
+        string='Period Error', compute='_compute_sale_error_states', store=True)
     profit_percentage = fields.Float(
         'Profit Percentage', digits=dp.get_precision('Account'),
         compute='_compute_profit_percentage', store=True)
+    cost_error_manual_time = fields.Datetime(
+        'Cost Manual Fix', track_visibility='onchange')
+    period_error_manual_time = fields.Datetime(
+        'Period Manual Fix', track_visibility='onchange')
