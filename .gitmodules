@@ -1,0 +1,3 @@
+[submodule "oca/project"]
+	path = oca/project
+	url = git@github.com:clearcorp/oca-project
