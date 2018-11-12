@@ -3,6 +3,7 @@
 
 from odoo import models, fields
 
+
 class Move(models.Model):
 
     _inherit = 'account.move'
