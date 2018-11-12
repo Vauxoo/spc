@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from oauth2client.client import OAuth2WebServerFlow
-from openerp import models, fields, api
+from odoo import models, fields, api
 
 SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
 CLIENT_ID = '149905831071-d08bancbk563mj8avccqnfpc12rllimv.apps.googleusercontent.com'

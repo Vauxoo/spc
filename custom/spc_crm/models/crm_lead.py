@@ -7,9 +7,9 @@ import httplib2
 import logging
 from apiclient import discovery
 from oauth2client.client import Credentials
-from openerp import models, fields, api, _
-from openerp.exceptions import Warning
-import openerp.addons.decimal_precision as dp
+from odoo import models, fields, api, _
+from odoo.exceptions import Warning
+import odoo.addons.decimal_precision as dp
 
 SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
 CLIENT_ID = '149905831071-d08bancbk563mj8avccqnfpc12rllimv.apps.googleusercontent.com'
