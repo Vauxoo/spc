@@ -9,7 +9,7 @@
             <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
             <field name="priority" eval="110"/>
             <field name="arch" type="xml">
-                <xpath expr="//form/sheet/div/h2/field[@name='x_planned_contribution_margin']" position="after">
+                <xpath expr="//field[@name='planned_revenue']" position="after">
                     <span> - </span>
                     <field name="detail_incidentals" class="oe_inline" widget="monetary" options="{'currency_field': 'company_currency'}" nolabel="1"/>
                     <span> = </span>
@@ -148,9 +148,6 @@
                 </xpath>
                 <xpath expr="//form/sheet/notebook/page/group/group/field[@name='referred']" position="after">
                     <field name="change_company_id" groups="base.group_multi_company"/>
-                </xpath>
-                <xpath expr="//form/sheet/notebook/page/group/group/field[@name='ref2']" position="after">
-                    <field name="ref_sale_ids" widget="many2many_tags"/>
                 </xpath>
                 <xpath expr="//form/sheet/notebook/page[1]/field[@name='description']" position="after">
                     <separator/>
