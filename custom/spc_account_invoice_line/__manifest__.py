@@ -21,23 +21,22 @@
 ##############################################################################
 
 {
-    'name': 'SPC Account Invoice Line',
-    'version': '8.0.1.0',
+    'name': 'SPC - Account invoice print lines',
+    'version': '1.0',
     'author': 'ClearCorp',
     'complexity': 'normal',
-    'website': 'http://clearcorp.co.cr',
     'category': 'Accounting & Finance',
     'description': """
 Add the model of account invoice line new print lines
 """,
-    'depends': ['account_invoice_discount', 'account_invoice_report', ],
-    'data': ['spc_account_invoice_line_view.xml',
-             'security/ir.model.access.csv',
-             ],
+    'depends': ['account_invoice_discount'],
+    #'data': ['spc_account_invoice_line_view.xml',
+    #         'security/ir.model.access.csv',
+    #         ],
     'test': [],
     'demo': [],
     'license': 'AGPL-3',
-    'installable': False,
+    'installable': True,
     'active': False,
 }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

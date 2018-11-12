@@ -1,33 +1,15 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    OpenERP, Open Source Management Solution
-#    Addons modules by CLEARCORP S.A.
 #    Copyright (C) 2009-TODAY CLEARCORP S.A. (<http://clearcorp.co.cr>).
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-from openerp import models, fields, api, _
-import openerp.addons.decimal_precision as dp
-from openerp.exceptions import Warning
+from odoo import models, fields, api, _
+import odoo.addons.decimal_precision as dp
+from odoo.exceptions import Warning
 
 
 class account_invoice(models.Model):
 
     _inherit = 'account.invoice'
-
+"""
     @api.multi
     def invoice_validate(self):
         if self.type == "out_invoice":
@@ -55,7 +37,7 @@ class account_invoice(models.Model):
                 'total_print': invoice.amount_total,
             })
         return True
-
+"""
     print_line_ids = fields.One2many('account.invoice.printlines',
                                      'invoice_id', string='Print Lines')
     subtotal_print = fields.Float('Subtotal',
@@ -68,7 +50,7 @@ class account_invoice(models.Model):
                                   digits=dp.get_precision('Account'))
 
 
-class account_invoice_printlines(models.Model):
+class AccountInvoicePrintlines(models.Model):
     """Print Lines"""
 
     _name = 'account.invoice.printlines'
@@ -88,7 +70,7 @@ class account_invoice_printlines(models.Model):
 class AccountInvoiceLine(models.Model):
 
     _inherit = 'account.invoice.line'
-
+"""
     @api.model
     def create(self, vals):
         res = super(AccountInvoiceLine, self).create(vals)
@@ -110,3 +92,4 @@ class AccountInvoiceLine(models.Model):
         }
         printlines_obj.create(print_lines)
         return res
+"""
