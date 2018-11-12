@@ -2,10 +2,8 @@
 # © 2016 ClearCorp
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp import models, fields, api
-import openerp.addons.decimal_precision as dp
-from datetime import datetime
-
+from odoo import models, fields, api
+import odoo.addons.decimal_precision as dp
 
 class SaleOrder(models.Model):
 
