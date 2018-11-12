@@ -9,33 +9,34 @@ class SaleOrder(models.Model):
 
     _inherit = 'sale.order'
 
-    @api.multi
-    def action_reassign_sale_costs(self):
-        for order in self:
-            # Get the oldest income
-            income_line = self.env['account.move.line'].search(
-                [('id', 'in', order.income_line_ids._ids)], order='date asc',
-                limit=1)
-            if income_line:
-                for line in order.cost_line_ids:
-                    if line.period_id.id != income_line.period_id.id:
-                        if line.move_id.state == 'posted':
-                            line.move_id.button_cancel()
-                            line.write({
-                                'period_id': income_line.period_id.id,
-                                'date': income_line.date,
-                            })
-                            line.move_id.button_validate()
-                        else:
-                            line.write({
-                                'period_id': income_line.period_id.id,
-                                'date': income_line.date,
-                            })
+    #TODO: Cambiar lógica para utilizar la fecha en lugar del periodo.
+    # @api.multi
+    # def action_reassign_sale_costs(self):
+    #     for order in self:
+    #         # Get the oldest income
+    #         income_line = self.env['account.move.line'].search(
+    #             [('id', 'in', order.income_line_ids._ids)], order='date asc',
+    #             limit=1)
+    #         if income_line:
+    #             for line in order.cost_line_ids:
+    #                 if line.period_id.id != income_line.period_id.id:
+    #                     if line.move_id.state == 'posted':
+    #                         line.move_id.button_cancel()
+    #                         line.write({
+    #                             'period_id': income_line.period_id.id,
+    #                             'date': income_line.date,
+    #                         })
+    #                         line.move_id.button_validate()
+    #                     else:
+    #                         line.write({
+    #                             'period_id': income_line.period_id.id,
+    #                             'date': income_line.date,
+    #                         })
 
     @api.multi
     @api.depends(
         'invoice_ids', 'invoice_ids.move_id',
-        'invoice_ids.move_id.line_id.account_id.income_on_sale_order')
+        'invoice_ids.move_id.line_ids.account_id.income_on_sale_order')
     def _compute_income_line_ids(self):
         for order in self:
             # Get income lines
@@ -53,9 +54,9 @@ class SaleOrder(models.Model):
     @api.depends(
         'cost_picking_ids', 'cost_picking_ids.state', 'invoice_ids',
         'invoice_ids.move_id', 'cost_line_ids',
-        'invoice_ids.move_id.line_id.account_id.income_on_sale_order',
-        'invoice_ids.move_id.period_id', 'invoice_ids.move_id.date',
-        'cost_line_ids.period_id', 'cost_line_ids.date',
+        'invoice_ids.move_id.line_ids.account_id.income_on_sale_order',
+        'invoice_ids.move_id.date',
+        'cost_line_ids.date',
         'cost_error_manual_time', 'period_error_manual_time')
     def _compute_sale_error_states(self):
         for order in self:
@@ -95,9 +96,11 @@ class SaleOrder(models.Model):
                         order='date asc', limit=1)
                     if income_line:
                         for line in order.cost_line_ids:
-                            if line.period_id.id != income_line.period_id.id:
-                                period_state = 'error'
-                                break
+                            #TODO: Cambiar lógica para utilizar fecha en lugar de periodo
+                            continue
+                            # if line.period_id.id != income_line.period_id.id:
+                            #     period_state = 'error'
+                            #     break
 
             # Set cost error state
             order.cost_error = state_cost
@@ -107,7 +110,7 @@ class SaleOrder(models.Model):
     @api.multi
     @api.depends(
         'cost_line_ids', 'invoice_ids', 'invoice_ids.move_id',
-        'invoice_ids.move_id.line_id.account_id.income_on_sale_order')
+        'invoice_ids.move_id.line_ids.account_id.income_on_sale_order')
     def _compute_profit_percentage(self):
         for order in self:
             total_credit = 0.0
