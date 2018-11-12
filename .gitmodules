@@ -4,3 +4,6 @@
 [submodule "oca/server-tools"]
 	path = oca/server-tools
 	url = git@github.com:clearcorp/oca-server-tools.git
+[submodule "clearcorp/odoo-clearcorp"]
+	path = clearcorp/odoo-clearcorp
+	url = git@github.com:clearcorp/odoo-clearcorp.git
