@@ -3,31 +3,41 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html). -->
 <openerp>
     <data>
-        <record id="view_sale_config_form" model="ir.ui.view">
-            <field name="name">Sale Config Form</field>
-            <field name="model">sale.config.settings</field>
-            <field name="inherit_id" ref="base_setup.view_sale_config_settings"/>
+        <record id="res_config_settings_view_form" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit.spc_crm</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="crm.res_config_settings_view_form"/>
             <field name="priority" eval="16"/>
             <field name="arch" type="xml">
-                <xpath expr="//form/div[@name='customer feature']" position="inside">
-                    <separator string="BC Sync Configuration"/>
-                    <group name="bc_sync">
-                        <label for="id" string="BC Sync Authorization Code"/>
-                        <div name="bc_sync">
-                            <div name="bc_sync_auth_code">
-                                <field name="spc_crm_bc_authorization_code"  class="oe_inline"/>
+                <xpath expr="//div[@data-key='crm']" position="inside">
+                    <h2>BC Sync Configuration</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-md-6 o_setting_box">
+                            <div class="o_setting_left_pane">
                             </div>
-                            <div name="bc_sync_auth_uri">
-                                <field name="spc_crm_bc_uri" widget="url" text="Generate Google Authorization Code" class="oe_inline oe_bold"/>
+                            <div class="o_setting_right_pane">
+                                <field name="bc_authorization_code"/>
                             </div>
                         </div>
-                        <label for="id" string="BC Template"/>
-                        <div name="bc_sync_template">
-                            <div name="bc_sync_template">
-                                <field name="spc_crm_bc_template"  class="oe_inline"/>
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <field name="bc_uri"/>
                             </div>
                         </div>
-                    </group>
+                    </div>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-md-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <field name="bc_template"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                        </div>
+                    </div>
                 </xpath>
             </field>
         </record>
