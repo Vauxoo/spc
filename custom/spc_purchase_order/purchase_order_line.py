@@ -44,21 +44,21 @@ class PurchaseOrderLine(models.Model):
         compute='_compute_line_status',
         readonly=True,
         store=True,
-        digits_compute=dp.get_precision('Product Unit of Measure')
+        digits=dp.get_precision('Product Unit of Measure')
         )
     compute_received_qty = fields.Float(
         'Received qty.',
         compute='_compute_line_status',
         readonly=True,
         store=True,
-        digits_compute=dp.get_precision('Product Unit of Measure')
+        digits=dp.get_precision('Product Unit of Measure')
         )
     compute_delivered_qty = fields.Float(
         'Delivered qty.',
         compute='_compute_line_status',
         readonly=True,
         store=True,
-        digits_compute=dp.get_precision('Product Unit of Measure')
+        digits=dp.get_precision('Product Unit of Measure')
         )
     
     @api.depends('invoice_lines.invoice_id.state','move_ids.state','order_id.state')
