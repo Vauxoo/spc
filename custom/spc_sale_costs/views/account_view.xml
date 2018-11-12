@@ -9,7 +9,7 @@
             <field name="model">account.account</field>
             <field name="inherit_id" ref="account.view_account_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//form/group/group/field[@name='reconcile']" position="after">
+                <xpath expr="//field[@name='deprecated']" position="before">
                     <field name="income_on_sale_order"/>
                     <field name="cost_on_sale_order"/>
                 </xpath>
