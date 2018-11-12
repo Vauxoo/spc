@@ -156,11 +156,10 @@ class Lead(models.Model):
                     _logger.info('Unable to sync for this BC version.')
         return True
 
-    def sync_business_case_all(self, cr, uid, stage_ids=[], context=None):
+    def sync_business_case_all(self, stage_ids=[]):
         """Sync all bussiness_case in the states specified"""
-        lead_ids = self.search(
-            cr, uid, [('stage_id', 'in', stage_ids)], context=context)
-        for lead in self.browse(cr, uid, lead_ids, context=context):
+        leads = self.search([('stage_id', 'in', stage_ids)])
+        for lead in leads:
             try:
                 lead.sync_business_case()
             except:
