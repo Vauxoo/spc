@@ -7,3 +7,6 @@
 [submodule "clearcorp/odoo-clearcorp"]
 	path = clearcorp/odoo-clearcorp
 	url = git@github.com:clearcorp/odoo-clearcorp.git
+[submodule "oca/product-attribute"]
+	path = oca/product-attribute
+	url = git@github.com:clearcorp/oca-product-attribute.git
