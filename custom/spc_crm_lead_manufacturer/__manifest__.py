@@ -20,4 +20,21 @@
 #
 ##############################################################################
 
-import lead_manufacturer_report
+{
+    'name': 'SPC CRM Lead Manufacturer',
+    'version': '1.0',
+    'category': 'Customer Relationship Management',
+    'sequence': 10,
+    'summary': 'Custom module to track manufacturer forecasts',
+    'author': 'ClearCorp',
+    'depends': ['crm', 'product_brand'],
+    'data': ['security/ir.model.access.csv',
+             'spc_crm_lead_manufacturer.xml',
+             'spc_crm_lead_manufacturer_report.xml'],
+    'test': [],
+    'demo': [],
+    'installable': True,
+    'auto_install': False,
+    'application': False,
+    'license': 'AGPL-3',
+}
