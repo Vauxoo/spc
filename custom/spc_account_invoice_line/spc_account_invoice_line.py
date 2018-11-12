@@ -9,7 +9,7 @@ from odoo.exceptions import Warning
 class account_invoice(models.Model):
 
     _inherit = 'account.invoice'
-"""
+    """
     @api.multi
     def invoice_validate(self):
         if self.type == "out_invoice":
@@ -37,7 +37,7 @@ class account_invoice(models.Model):
                 'total_print': invoice.amount_total,
             })
         return True
-"""
+    """
     print_line_ids = fields.One2many('account.invoice.printlines',
                                      'invoice_id', string='Print Lines')
     subtotal_print = fields.Float('Subtotal',
