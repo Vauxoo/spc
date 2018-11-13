@@ -5,6 +5,7 @@ from odoo import models, fields, api, tools
 from odoo.tools import float_compare
 import odoo.addons.decimal_precision as dp
 
+
 class PurchaseOrderLine(models.Model):
     _inherit = 'purchase.order.line'
     
@@ -79,9 +80,10 @@ class PurchaseOrderLine(models.Model):
             for move in record.move_ids:
                 if move.state == 'done':
                     received_qty += move.product_uom_qty
-                for quant in move.quant_ids:
-                    if quant.location_id.usage != 'internal' or quant.location_id.company_id != move.company_id:
-                        delivered_qty += quant.qty
+                # TODO: Set delivered quantity, no quants in v11
+                # for quant in move.quant_ids:
+                #     if quant.location_id.usage != 'internal' or quant.location_id.company_id != move.company_id:
+                #         delivered_qty += quant.qty
                 
             if float_compare(record.product_qty, received_qty, precision_digits=precision) == 0:
                 received = True
