@@ -48,14 +48,14 @@ class ResConfigSettings(models.TransientModel):
     def set_values(self):
         super(ResConfigSettings, self).set_values()
         ICPSudo = self.env['ir.config_parameter'].sudo()
-        ICPSudo.set_param('spc_crm.bc_template', str(self.bc_template.id), groups=['base.group_system'])
+        ICPSudo.set_param('spc_crm.bc_template', str(self.bc_template.id))
         if self.bc_authorization_code and \
                 self.bc_authorization_code != ICPSudo.get_param('spc_crm.bc_authorization_code'):
-            ICPSudo.set_param("spc_crm.bc_authorization_code", self.bc_authorization_code, groups=['base.group_system'])
+            ICPSudo.set_param("spc_crm.bc_authorization_code", self.bc_authorization_code)
             flow = OAuth2WebServerFlow(
                 client_id=CLIENT_ID,
                 client_secret=CLIENT_SECRET,
                 scope=SCOPES,
                 redirect_uri=REDIRECT_URI)
             credentials = flow.step2_exchange(self.bc_authorization_code)
-            ICPSudo.set_param('spc_crm.bc_credentials', credentials.to_json(), groups=['base.group_system'])
+            ICPSudo.set_param('spc_crm.bc_credentials', credentials.to_json())
