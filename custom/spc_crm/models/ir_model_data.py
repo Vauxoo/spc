@@ -18,19 +18,6 @@ class AccountAnalyticAccount(models.Model):
         return res
 
 
-class SaleOrder(models.Model):
-
-    _inherit = 'sale.order'
-
-    @api.model
-    @api.returns('self', lambda value: value.id)
-    def create(self, vals):
-        res = super(SaleOrder, self).create(vals)
-        # Forces the external ID creation as well
-        res._BaseModel__ensure_xml_id()
-        return res
-
-
 class PurchaseOrder(models.Model):
 
     _inherit = 'purchase.order'
