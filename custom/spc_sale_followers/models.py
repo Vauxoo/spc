@@ -17,3 +17,14 @@ class Lead(models.Model):
                 recipients[lead_id] = []
         return recipients
 
+
+class SaleOrder(models.Model):
+
+    _inherit = 'sale.order'
+
+    @api.multi
+    def message_subscribe(self, partner_ids=None, channel_ids=None, subtype_ids=None, force=True):
+        for partner in partner_ids:
+            if partner == self.partner_id.id:
+                partner_ids.remove(partner)
+        return super(SaleOrder, self).message_subscribe()
