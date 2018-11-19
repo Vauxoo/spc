@@ -57,3 +57,10 @@ target/
 .project
 .pydevproject
 .settings
+
+
+# SPC Tools
+tools/bc-update/*.xml*
+tools/bc-update/*.csv*
+tools/bc-update/.error.tmp
+tools/bc-update/*/
