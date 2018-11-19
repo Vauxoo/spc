@@ -3,6 +3,9 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo import models, api
+import logging
+
+_logger = logging.getLogger(__name__)
 
 
 class Lead(models.Model):
@@ -26,5 +29,6 @@ class SaleOrder(models.Model):
     def message_subscribe(self, partner_ids=None, channel_ids=None, subtype_ids=None, force=True):
         for partner in partner_ids:
             if partner == self.partner_id.id:
+                _logger.info(partner)
                 partner_ids.remove(partner)
         return super(SaleOrder, self).message_subscribe()
