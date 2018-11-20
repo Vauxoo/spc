@@ -38,7 +38,8 @@ class SaleOrder(models.Model):
         'invoice_ids', 'invoice_ids.move_id',
         'invoice_ids.move_id.line_ids.account_id.income_on_sale_order')
     def _compute_income_line_ids(self):
-        for order in self:
+        records = self.sudo()
+        for order in records:
             # Get income lines
             move_ids = []
             for invoice in order.invoice_ids:
@@ -59,7 +60,8 @@ class SaleOrder(models.Model):
         'cost_line_ids.date',
         'cost_error_manual_time', 'period_error_manual_time')
     def _compute_sale_error_states(self):
-        for order in self:
+        records = self.sudo()
+        for order in records:
             if order.cost_error_manual_time:
                 state_cost = 'manual'
             else:
@@ -112,7 +114,8 @@ class SaleOrder(models.Model):
         'cost_line_ids', 'invoice_ids', 'invoice_ids.move_id',
         'invoice_ids.move_id.line_ids.account_id.income_on_sale_order')
     def _compute_profit_percentage(self):
-        for order in self:
+        records = self.sudo()
+        for order in records:
             total_credit = 0.0
             total_debit = 0.0
             for line in order.income_line_ids:
