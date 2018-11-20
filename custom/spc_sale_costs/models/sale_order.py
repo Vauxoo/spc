@@ -34,12 +34,12 @@ class SaleOrder(models.Model):
     #                         })
 
     @api.multi
-    @api.depends(
-        'invoice_ids', 'invoice_ids.move_id',
-        'invoice_ids.move_id.line_ids.account_id.income_on_sale_order')
+    # Commented because in v11 it is called when any invoice is created.
+    # @api.depends(
+    #     'invoice_ids', 'invoice_ids.move_id',
+    #     'invoice_ids.move_id.line_ids.account_id.income_on_sale_order')
     def _compute_income_line_ids(self):
-        records = self.sudo()
-        for order in records:
+        for order in self:
             # Get income lines
             move_ids = []
             for invoice in order.invoice_ids:
@@ -53,15 +53,14 @@ class SaleOrder(models.Model):
 
     @api.multi
     @api.depends(
-        'cost_picking_ids', 'cost_picking_ids.state', 'invoice_ids',
-        'invoice_ids.move_id', 'cost_line_ids',
-        'invoice_ids.move_id.line_ids.account_id.income_on_sale_order',
-        'invoice_ids.move_id.date',
-        'cost_line_ids.date',
-        'cost_error_manual_time', 'period_error_manual_time')
+        'cost_picking_ids', 'cost_picking_ids.state',
+        # Commented because in v11 it is called when any invoice is created.
+        # 'invoice_ids', 'invoice_ids.move_id', 'cost_line_ids',
+        # 'invoice_ids.move_id.line_ids.account_id.income_on_sale_order',
+        # 'invoice_ids.move_id.date',
+        'cost_line_ids.date', 'cost_error_manual_time', 'period_error_manual_time')
     def _compute_sale_error_states(self):
-        records = self.sudo()
-        for order in records:
+        for order in self:
             if order.cost_error_manual_time:
                 state_cost = 'manual'
             else:
@@ -111,11 +110,12 @@ class SaleOrder(models.Model):
 
     @api.multi
     @api.depends(
-        'cost_line_ids', 'invoice_ids', 'invoice_ids.move_id',
-        'invoice_ids.move_id.line_ids.account_id.income_on_sale_order')
+        'cost_line_ids',
+        # Commented because in v11 it is called when any invoice is created.
+        # 'invoice_ids', 'invoice_ids.move_id', 'invoice_ids.move_id.line_ids.account_id.income_on_sale_order'
+    )
     def _compute_profit_percentage(self):
-        records = self.sudo()
-        for order in records:
+        for order in self:
             total_credit = 0.0
             total_debit = 0.0
             for line in order.income_line_ids:
