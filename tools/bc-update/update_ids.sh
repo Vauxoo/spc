@@ -8,6 +8,9 @@ read -r -d '' appsscript << EOM
   "exceptionLogging": "STACKDRIVER"
 }
 EOM
+read -r -d '' code << EOM
+//BC Version 32 / 2018-11-20
+EOM
 
 thread_count=8
 declare -a pids
@@ -86,7 +89,7 @@ update_id() {
 	fi
 	
 	#Test if other files found.
-	if [ $(ls -a -I . -I .. -I appsscript.json -I .clasp.json -I Código.js | wc -l) -ne 0 ]; then
+	if [ $(ls -a -I . -I .. -I appsscript.json -I .clasp.json -I Código.js -I Code.js | wc -l) -ne 0 ]; then
 		echo "$id: More files than necessary found, exiting."
 		error=true
 	fi
@@ -107,9 +110,23 @@ update_id() {
 	fi
 	
 	if [ "$error" = false ]; then
+		if [ ! -f Code.js ]; then
+			echo "$id: Code.js not found, creating it."
+			echo "$code" > Code.js
+			push=true
+		elif [[ "$(cat Code.js)" != "$code" ]]; then
+			echo "$id: Code.js differ, updating."
+			echo "$code" > Code.js
+			push=true
+		else
+			echo "$id: Code.js is up-to-date, skipping."
+		fi
+	fi
+	
+	if [ "$error" = false ]; then
 		if [ -f Código.js ]; then
-			echo "$id: Código.js found, removing."
-			rm "Código.js"
+			echo "$id: Código.js found, deleting it."
+			rm Código.js
 			push=true
 		fi
 	fi
