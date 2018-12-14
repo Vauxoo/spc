@@ -1,8 +1,14 @@
 # -*- coding: utf-8 -*-
-from odoo import fields, models, api, _
+from odoo import fields, models
 
 
-class AccountInvoice(models.Model):
-    _inherit = 'account.invoice'
+class AccountInvoiceLine(models.Model):
+    _inherit = 'account.invoice.line'
 
-
+    line_dest_id = fields.Many2one(
+        'account.invoice.line',
+        string='Downstream Line',
+        readonly=True,
+        help="It's filled, it's because a customer invoice line was generated"
+        " from this line."
+    )

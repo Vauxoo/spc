@@ -11,6 +11,7 @@
         'account_accountant',
     ],
     'data': [
+        'views/account_invoice_views.xml',
     ],
     'demo': [
     ],
