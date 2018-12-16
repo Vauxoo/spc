@@ -9,8 +9,19 @@
     'depends': [
         # Accounting
         'account_accountant',
+
+        # Stock
+        'stock',
+
+        # Purchase
+        'purchase',
+
+        # Sale
+        'sale_management',
+
     ],
     'data': [
+        'views/stock_move_views.xml',
         'security/res_groups.xml',
         'views/account_invoice_views.xml',
         'views/res_partner_views.xml',

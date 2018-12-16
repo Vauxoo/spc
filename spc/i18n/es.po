@@ -16,6 +16,38 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: spc
+#: model:ir.model.fields,help:spc.field_stock_move_serial_numbers
+msgid "A string that contains several unique serial numbers separated by commas."
+msgstr "Una cadena que contiene varios números de serie únicos separados por comas."
+
+#. module: spc
+#: model:ir.ui.view,arch_db:spc.view_stock_move_operations_inherit
+msgid "Assigns a serial number to each move line."
+msgstr "Asigna un número de serie a cada línea de movimiento."
+
+#. module: spc
+#: model:ir.model.fields,field_description:spc.field_stock_move_serial_numbers
+msgid "Serial Numbers"
+msgstr "Seriales"
+
+#. module: spc
+#: model:ir.ui.view,arch_db:spc.view_stock_move_operations_inherit
+msgid "Assign & Confirm"
+msgstr "Asignar y Confirmar"
+
+#. module: spc
+#: code:addons/spc/models/stock_move.py:30
+#, python-format
+msgid "There is no correspondence between the number of serials to assign (%d) and the number of lines in the movement (%d)."
+msgstr "No hay correspondencia entre el número de seriales para asignar (%d) y el número de líneas en el movimiento (%d)."
+
+#. module: spc
+#: code:addons/spc/models/stock_move.py:20
+#, python-format
+msgid "To use this feature, you must provide a valid input string. E.g. ABC012,DEF345,XYZ678"
+msgstr "Para usar esta característica, debe proporcionar una cadena de entrada válida. E.j. ABC012,DEF345,XYZ678"
+
+#. module: spc
 #: model:res.groups,comment:spc.group_invoice_to_country
 msgid "\n"
 "            - Users of this group will have access to the menu\n"
