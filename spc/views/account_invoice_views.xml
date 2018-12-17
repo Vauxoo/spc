@@ -16,8 +16,8 @@
         <field name="res_model">account.invoice.line</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
-        <field name="domain">[('invoice_id.type','=','in_invoice'), ('invoice_id.state', 'not in', ['draft', 'cancel')]</field>
+        <field name="domain">[('invoice_id.type','=','in_invoice'), ('invoice_id.state', 'not in', ['draft', 'cancel'])]</field>
     </record>
 
-    <menuitem action="action_invoice_line_tree1" id="menu_action_invoice_line_tree1" parent="account.menu_finance_payables_documents" sequence="7"/>
+    <menuitem action="action_invoice_line_tree1" id="menu_action_invoice_line_tree1" parent="account.menu_finance_receivables_documents" sequence="7"/>
 </odoo>

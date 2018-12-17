@@ -12,6 +12,7 @@
     ],
     'data': [
         'views/account_invoice_views.xml',
+        'wizard/account_invoice_create_view.xml',
     ],
     'demo': [
     ],
