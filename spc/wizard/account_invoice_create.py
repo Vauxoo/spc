@@ -13,43 +13,37 @@ class AccountInvoiceCreate(models.TransientModel):
     @api.depends('partner_id')
     def _compute_amount(self):
         total = 0
-        if self.pricelist_id and self.partner_id:
+        if self.partner_id:
             for line in self.invoice_line_ids:
                 price = line.price_subtotal
-                if line.product_id:
-                    price_rule = self.pricelist_id._compute_price_rule([(
-                        line.product_id, line.quantity, self.partner_id)])
-                    price, rule = price_rule[line.product_id.id]
+                sale_margin = self.sale_margin or 0.0
+                price = (price + (price * (sale_margin / 100))) or 0.0
                 total += price
         self.amount = total
 
-    @api.onchange('partner_id')
-    def onchange_partner_id(self):
-        """
-        Update the following fields when the partner is changed:
-        - Pricelist
-        """
-        values = {
-            'pricelist_id': (
-                self.partner_id.property_product_pricelist and
-                self.partner_id.property_product_pricelist.id or False)
-        }
-        self.update(values)
+    def _domain_partner_id(self):
+        all_companies = self.env['res.company'].sudo().search([])
+        default_domain = [('is_company', '=', True), ('customer', '=', True)]
+        partner_ids = []
+        if all_companies:
+            companies = all_companies - self.env.user.company_id
+            partner_ids = companies.mapped('partner_id').ids
+        return partner_ids and [('id', 'in', partner_ids)] or default_domain
 
     partner_id = fields.Many2one(
         'res.partner',
         required=True,
+        domain=lambda self: self._domain_partner_id(),
         help="Partner to be invoiced")
-    pricelist_id = fields.Many2one(
-        'product.pricelist',
-        string='Pricelist',
+    sale_margin = fields.Float(
+        string='Sale Margin',
+        related='partner_id.property_sale_margin',
         readonly=True,
-        help="Pricelist configured in selected partner")
+        help="Sale margin configured in selected partner")
     currency_id = fields.Many2one(
         'res.currency',
-        related='pricelist_id.currency_id',
-        string="Currency",
-        readonly=True)
+        readonly=True,
+        default=lambda self: self.env.user.company_id.currency_id)
     amount = fields.Monetary(
         string='Base amount',
         currency_field='currency_id',
@@ -135,10 +129,8 @@ class AccountInvoiceCreate(models.TransientModel):
             account = fpos.map_account(account)
 
         price_unit = line.price_unit
-        if line.product_id:
-            price_rule = self.pricelist_id._compute_price_rule([(
-                line.product_id, 1, self.partner_id)])
-            price_unit, rule = price_rule[line.product_id.id]
+        sale_margin = self.sale_margin or 0.0
+        price_unit = (price_unit + (price_unit * (sale_margin / 100))) or 0.0
 
         res = {
             'name': line.name,
@@ -159,11 +151,8 @@ class AccountInvoiceCreate(models.TransientModel):
     def action_invoice_create(self):
         precision = self.env['decimal.precision'].precision_get(
             'Product Unit of Measure')
-        self.onchange_partner_id()
         if not self.partner_id:
             raise UserError(_('You must first select a partner!'))
-        if not self.pricelist_id or not self.currency_id:
-            raise UserError(_('The partner must be assigned a pricelist!'))
         invoice = self.env['account.invoice'].create(self._prepare_invoice())
         for line in self.invoice_line_ids:
             if not float_is_zero(line.quantity, precision_digits=precision):

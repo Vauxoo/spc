@@ -52,18 +52,25 @@ class TestAccountInvoice(TransactionCase):
         return invoice
 
     def test_01_account_invoice_create(self):
+        supplier_invoice = self.create_supplier_invoice()
+        price_unit = supplier_invoice.invoice_line_ids[0].price_unit
+        sale_margin = 10.0
+        expected_amount = (price_unit + (price_unit * (sale_margin / 100))) or 0.0
+        customer = self.env.ref('base.res_partner_3')
         domain = safe_eval(
             self.env.ref('spc.action_invoice_line_tree1').read()[0]['domain'])
 
+        # Remove from domain ('id', '>', 18873) that will be used only in production
+        domain.pop(0)
+
         # Check lines available in 'To be Invoice to Country' List view
         tree_view_inv_lines_before = self.invoice_line_model.search(domain)
-        invoice = self.create_supplier_invoice()
 
         # Check again lines available in 'To be Invoice to Country' List view
         tree_view_inv_lines_after = self.invoice_line_model.search(domain)
         self.assertEqual(tree_view_inv_lines_before, tree_view_inv_lines_after,
                          "Invoice in Draft should not be include in List View")
-        invoice.action_invoice_open()
+        supplier_invoice.action_invoice_open()
 
         # Ensure that a new line is now available after invoice validation
         tree_view_inv_lines_after = self.invoice_line_model.search(domain)
@@ -76,21 +83,23 @@ class TestAccountInvoice(TransactionCase):
             active_ids=new_line.ids).create({
                 'partner_id': self.env.ref('base.res_partner_3').id,
             })
-        inv_create_wz.onchange_partner_id()
+
+        # Set margin to customer & re-compute amount
+        customer.write({'property_sale_margin': sale_margin})
         inv_create_wz._compute_amount()
 
-        # Review the amount pulled from pricelist
-        self.assertEqual(inv_create_wz.amount, new_line.product_id.list_price,
+        # Review the amount
+        self.assertEqual(inv_create_wz.amount, expected_amount,
                          "Unexpected amount calculation from wizard")
 
         view = inv_create_wz.action_invoice_create()
         customer_invoice = self.invoice_model.browse(view['res_id'])
 
         # Check if customer invoice has the expected amount
-        self.assertEqual(inv_create_wz.amount, customer_invoice.amount_untaxed,
+        self.assertEqual(customer_invoice.amount_untaxed, expected_amount,
                          "Unexpected invoice untaxed amount")
 
         # Check supplier invoice relationship with new invoice
-        self.assertEqual(invoice.invoice_line_ids.line_dest_id,
-                         customer_invoice.invoice_line_ids,
+        self.assertEqual(supplier_invoice.invoice_line_ids.line_dest_id,
+                         customer_invoice.invoice_line_ids[0],
                          "New line should be related to the supplier invoice")

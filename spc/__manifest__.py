@@ -11,7 +11,9 @@
         'account_accountant',
     ],
     'data': [
+        'security/res_groups.xml',
         'views/account_invoice_views.xml',
+        'views/res_partner_views.xml',
         'wizard/account_invoice_create_view.xml',
     ],
     'demo': [

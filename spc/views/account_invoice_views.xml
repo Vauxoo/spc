@@ -28,14 +28,15 @@
         </field>
     </record>
 
+    <!-- NOTE: The domain ('id', '>', 18873) is used to avoid historical records -->
     <record id="action_invoice_line_tree1" model="ir.actions.act_window">
         <field name="name">To be Invoiced to country</field>
         <field name="res_model">account.invoice.line</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree</field>
         <field name="view_id" ref="spc_view_invoice_line_tree"/>
-        <field name="domain">[('invoice_id.type','=','in_invoice'), ('invoice_id.state', 'not in', ['draft', 'cancel']), ('line_dest_id', '=', False)]</field>
+        <field name="domain">[('id', '>', '18873'), ('invoice_id.type','=','in_invoice'), ('invoice_id.state', 'not in', ['draft', 'cancel']), ('line_dest_id', '=', False)]</field>
     </record>
 
-    <menuitem action="action_invoice_line_tree1" id="menu_action_invoice_line_tree1" parent="account.menu_finance_receivables_documents" sequence="7"/>
+    <menuitem action="action_invoice_line_tree1" id="menu_action_invoice_line_tree1" parent="account.menu_finance_receivables_documents" sequence="7" groups="spc.group_invoice_to_country"/>
 </odoo>
