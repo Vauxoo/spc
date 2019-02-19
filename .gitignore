@@ -64,3 +64,5 @@ tools/bc-update/*.xml*
 tools/bc-update/*.csv*
 tools/bc-update/.error.tmp
 tools/bc-update/*/
+
+.directory
