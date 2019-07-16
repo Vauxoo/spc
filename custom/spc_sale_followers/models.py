@@ -32,3 +32,16 @@ class SaleOrder(models.Model):
                 _logger.info("Removed partner %s from sale.order %s in subscribe followers." % (partner, self.id))
                 partner_ids.remove(partner)
         return super(SaleOrder, self).message_subscribe(partner_ids, channel_ids, subtype_ids, force)
+
+
+class SaleSubscription(models.Model):
+
+    _inherit = 'sale.subscription'
+
+    @api.multi
+    def message_subscribe(self, partner_ids=None, channel_ids=None, subtype_ids=None, force=True):
+        for partner in partner_ids:
+            if partner == self.partner_id.id:
+                _logger.info("Removed partner %s from sale.subscription %s in subscribe followers." % (partner, self.id))
+                partner_ids.remove(partner)
+        return super(SaleSubscription, self).message_subscribe(partner_ids, channel_ids, subtype_ids, force)
