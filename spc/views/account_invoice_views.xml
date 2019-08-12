@@ -40,7 +40,7 @@
         <field name="view_type">form</field>
         <field name="view_mode">tree</field>
         <field name="view_id" ref="spc_view_invoice_line_tree"/>
-        <field name="domain">['&amp;','|',('invoice_id', '>', 18873), ('invoice_id', 'in', [18361,18873,19137,15523,17945,18309,18313,18440,18469,18519,18541,18361,18873,19137,18320,18834,18833,18873,18832,18817,18872,18210,18320,18834,18833,18873,18832,18817,18872,18210,17698,17770,9319,18334,18340,18360,18361,2147,14956,17092,17351,17375,17851,17915,18335,18338,18363,18366,2129,18262,18305,18308,18316,14524,15018,15019,15234,18100,18341,18405,18797,15601,18364,18796,15687,16110,17528,17822,18342,18362,18365,18795,19485,20119,20120,19276,19282,19310,19511,19515,19519,19531,19652,19653,19656,19668,19827,19907,19908,19909,19910,19912,19944,19945,19946,19947,19948,19949,19950,19951,19952,19953,19954,19955,19956,19957,19963,19965,19966,19967,19968,19969,19975,19976,19978,19979,19981,19982,19983,18182,18861,18862,18865,18871,19137,18361,18361,18873,19137,16393,16394,17612,18526]), ('product_id', '!=', 44494), ('invoice_id.type','=','in_invoice'), ('invoice_id.state', 'not in', ['draft', 'cancel']), ('line_dest_id', '=', False)]</field>
+        <field name="domain">['&amp;','|',('invoice_id', '>', 18873), ('product_id', '!=', 44494), ('quantity', '!=', 0), ('price_unit', '!=', 0), ('invoice_id.type','=','in_invoice'), ('invoice_id.state', 'not in', ['draft', 'cancel']), ('line_dest_id', '=', False)]</field>
     </record>
 
     <menuitem action="action_invoice_line_tree1" id="menu_action_invoice_line_tree1" parent="account.menu_finance_receivables_documents" sequence="7" groups="spc.group_invoice_to_country"/>
