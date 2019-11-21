@@ -1,7 +1,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 {
     'name': 'SPC Internacional App',
-    'version': '11.0.0.0.2',
+    'version': '11.0.0.0.3',
     "author": "Vauxoo",
     "license": "LGPL-3",
     'category': 'Hidden',
