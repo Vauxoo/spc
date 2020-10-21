@@ -2,3 +2,11 @@
 	path = spc
 	url = git@git.vauxoo.com:Vauxoo/spc.git
 	branch = 13.0
+[submodule "project"]
+	path = project
+	url = git@github.com:vauxoo/project.git
+	branch = 13.0
+[submodule "brand"]
+	path = brand
+	url = git@github.com:vauxoo/brand.git
+	branch = 13.0
