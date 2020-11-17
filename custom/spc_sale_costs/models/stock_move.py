@@ -16,7 +16,7 @@ class StockMove(models.Model):
         if vals['company_id'] != self.env.user.company_id.id and \
             71 in self.env.user.groups_id._ids and \
             self.env.user.company_id.id == 9:
-            res = super(StockMove, self).sudo().create(vals)
+            res = super(StockMove, self.sudo()).create(vals)
         else:
             res = super(StockMove, self).create(vals)
         if 'group_id' in vals and 'picking_id' in vals:
@@ -34,7 +34,7 @@ class StockMove(models.Model):
             self.mapped('company_id.id') and \
             71 in self.env.user.groups_id._ids and \
             self.env.user.company_id.id == 9:
-            res = super(StockMove, self).sudo().write(vals)
+            res = super(StockMove, self.sudo()).write(vals)
         else:
             res = super(StockMove, self).write(vals)
         if 'group_id' in vals or 'picking_id' in vals:
