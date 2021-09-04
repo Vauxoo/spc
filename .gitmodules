@@ -10,3 +10,7 @@
 	path = brand
 	url = git@github.com:vauxoo/brand.git
 	branch = 13.0
+[submodule "server-tools"]
+	path = server-tools
+	url = git@github.com:Vauxoo/server-tools.git
+	branch = 13.0
