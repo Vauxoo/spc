@@ -14,3 +14,7 @@
 	path = server-tools
 	url = git@github.com:Vauxoo/server-tools.git
 	branch = 13.0
+[submodule "stock-psycho-account"]
+	path = stock-psycho-account
+	url = git@git.vauxoo.com:vauxoo/stock-psycho-account.git
+	branch = 13.0
