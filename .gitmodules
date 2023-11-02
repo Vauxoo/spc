@@ -14,3 +14,15 @@
 	path = server-tools
 	url = git@github.com:Vauxoo/server-tools.git
 	branch = 13.0
+[submodule "costarica"]
+	path = costarica
+	url = git@git.vauxoo.com:vauxoo/costarica.git
+	branch = 13.0
+[submodule "nicaragua"]
+	path = nicaragua
+	url = git@git.vauxoo.com:vauxoo/nicaragua.git
+	branch = 13.0
+[submodule "guatemala"]
+	path = guatemala
+	url = git@git.vauxoo.com:vauxoo/guatemala.git
+	branch = 13.0
